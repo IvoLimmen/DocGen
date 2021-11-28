@@ -17,36 +17,37 @@ The configuration file has the following properties.
 The following models from OpenAPI are being converted to AsciiDoc:
 
 * Info
-  * Title
-  * Description
-  * Version
-  * Contact information
+** Title
+** Description
+** Version
+** Contact information
+  
 * Paths (sorted!)
-  * Per path the operations if they are present in the order:
-    * delete
-    * get
-    * head
-    * options
-    * patch
-    * post
-    * put
-    * trace
+** Per path the operations if they are present in the following order:
+*** delete
+*** get
+*** head
+*** options
+*** patch
+*** post
+*** put
+*** trace
 * Per operation:
-  * the current path
-  * the call (method and path)
-  * If the method is deprecated (warning)
-  * Description
-  * Summary
-  * RequestBody
-    * Description
-    * If the body is required
-    * Shows object references per media type
-  * Parameters
-    * Lists type,name,description,schema and default
-    * Also adds examples in the default column
-  * Responses
-    * Shows object references per media type
-    * Currently does not list anonymous types
+** the current path
+** the call (method and path)
+** If the method is deprecated (warning)
+** Description
+** Summary
+** RequestBody
+*** Description
+*** If the body is required
+*** Shows object references per media type
+** Parameters
+*** Lists type, name, description, schema and default
+*** Also adds examples in the default column
+** Responses
+*** Shows object references per media type
+*** Currently does not list anonymous types
 
 The following stuff is not (yet?) handled:
 
