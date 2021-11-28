@@ -1,0 +1,5 @@
+{
+  "templateDirectory": "/home/ivo/projects/os/docgen/config",
+  "sourceDirectory": "/home/ivo/Documents/Test",
+  "targetDirectory": "/home/ivo/Downloads/output"
+}
