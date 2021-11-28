@@ -49,6 +49,7 @@ The following models from OpenAPI are being converted to AsciiDoc:
     * Currently does not list anonymous types
 
 The following stuff is not (yet?) handled:
+
   * External examples
   * Headers
   * Security
