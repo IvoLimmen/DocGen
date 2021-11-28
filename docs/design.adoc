@@ -2,6 +2,6 @@
 
 ## Goal of this application
 
-Takes a directory containing multiple AsciiDoc files and generates a nice index on top of it. But it should be as flexible as possible. So documents sould be easibly renamed just as directories.
+Will convert as much as possible to generate one documentation hub from a set of input files.
 
 The input should be a configuration file that contains a input directory and a set of rules so it knows how to generate the index.

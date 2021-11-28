@@ -30,12 +30,10 @@ public class AsciiDocFileVisitor implements FileVisitor<Path> {
 
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-    if (file.getFileName().toString().endsWith(".adoc")) {
-      Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".adoc", ".html");
-      Files.createDirectories(targetFile.getParent());
-      this.asciiDocConverter.convertToHtml(file, targetFile);
-      this.indexer.addNewLink(targetFile);      
-    }
+    Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
+    Files.createDirectories(targetFile.getParent());
+    this.asciiDocConverter.convertToHtml(file, targetFile);
+    this.indexer.addNewLink(targetFile);
     return FileVisitResult.CONTINUE;
   }
 

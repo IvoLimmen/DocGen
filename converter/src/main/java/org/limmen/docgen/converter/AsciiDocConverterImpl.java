@@ -23,12 +23,28 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
 
   @Override
   public void convertToHtml(Path sourceFile, Path targetFile) throws IOException {
+    if (sourceFile.toString().endsWith("json") || sourceFile.toString().endsWith("yml") || sourceFile.toString().endsWith("yaml")) {
+      convertSwaggerFileToHtml(sourceFile);
+      convertAsciiDocToHtml(this.fileSystemHelper.changeExtention(sourceFile, ".adoc"), targetFile);
+    }
+    if (sourceFile.toString().endsWith("adoc")) {
+      convertAsciiDocToHtml(sourceFile, targetFile);
+    }
+  }
+
+  private void convertSwaggerFileToHtml(Path sourceFile) throws IOException {
+
+    Generator generator = new Generator();
+    generator.generate(sourceFile, sourceFile.getParent());
+  }
+
+  private void convertAsciiDocToHtml(Path sourceFile, Path targetFile) throws IOException {
     asciidoctor.convertFile(sourceFile.toFile(), 
         Options.builder()
             .toFile(true)
             .backend("html5")
             .safe(SafeMode.UNSAFE)
             .build());
-    Files.move(this.fileSystemHelper.changeExtention(sourceFile, ".adoc", ".html"), targetFile, StandardCopyOption.REPLACE_EXISTING);
+    Files.move(this.fileSystemHelper.changeExtention(sourceFile, ".html"), targetFile, StandardCopyOption.REPLACE_EXISTING);
   }
 }

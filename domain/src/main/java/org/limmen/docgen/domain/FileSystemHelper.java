@@ -47,7 +47,9 @@ public class FileSystemHelper {
         subPath(file, config.getSourceDirectory().toString()));
   }
 
-  public Path changeExtention(Path file, String oldExtention, String newExtention) {
-    return Path.of(file.toString().replace(oldExtention, newExtention));
+  public Path changeExtention(Path file, String newExtention) {
+    var path = file.getParent().toString();
+    var name = file.getFileName().toString();       
+    return Path.of(path, name.substring(0, name.indexOf(".")) + newExtention);
   }
 }
