@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.Indexer;
