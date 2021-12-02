@@ -32,9 +32,11 @@ public class Main {
 
   private void walkThroughFiles() throws IOException {
     var converter = new AsciiDocConverterImpl(fileSystemHelper);
-    var fileVisitor = new AsciiDocFileVisitor(converter, indexer, fileSystemHelper);
+    var supportFileVisitor = new SupportFileVisitor(fileSystemHelper);
+    var asciiDocfileVisitor = new AsciiDocFileVisitor(converter, indexer, fileSystemHelper);
 
-    Files.walkFileTree(config.getSourceDirectory(), fileVisitor);
+    Files.walkFileTree(config.getSourceDirectory(), asciiDocfileVisitor);
+    Files.walkFileTree(config.getSourceDirectory(), supportFileVisitor);
     indexer.generate();
   }
 }

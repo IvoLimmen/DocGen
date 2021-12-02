@@ -17,6 +17,11 @@ public class FileSystemHelper {
     return file.toString().substring(1);
   }
 
+  public String getExtention(Path file) {
+    var name = file.getFileName().toString();       
+    return name.substring(name.indexOf(".") + 1);
+  }
+
   public String getFileName(Path file) {    
     var name = file.getFileName().toString();       
     return WordUtils.capitalize(name.substring(0, name.indexOf(".")));

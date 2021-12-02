@@ -19,6 +19,8 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
 
   public AsciiDocConverterImpl(FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper =fileSystemHelper;
+
+    asciidoctor.requireLibrary("asciidoctor-diagram");
   }
 
   @Override

@@ -5,22 +5,18 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 
-import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.Indexer;
 
-public class AsciiDocFileVisitor implements FileVisitor<Path> {
+public class SupportFileVisitor implements FileVisitor<Path> {
 
-  private AsciiDocConverter asciiDocConverter;
   private FileSystemHelper fileSystemHelper;
-  private Indexer indexer;
 
-  public AsciiDocFileVisitor(AsciiDocConverter asciiDocConverter, Indexer indexer, FileSystemHelper fileSystemHelper) {
-    this.asciiDocConverter = asciiDocConverter;
+  public SupportFileVisitor(FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper = fileSystemHelper;
-    this.indexer = indexer;
   }
 
   @Override
@@ -31,11 +27,10 @@ public class AsciiDocFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (extention.equals("adoc")) {
-      Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
+    if (List.of("png", "apng", "jpg", "jpeg", "gif").contains(extention)) {
+      Path targetFile = this.fileSystemHelper.toTargetPath(file);
       Files.createDirectories(targetFile.getParent());
-      this.asciiDocConverter.convertToHtml(file, targetFile);
-      this.indexer.addNewLink(targetFile);  
+      Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
     }
     return FileVisitResult.CONTINUE;
   }
