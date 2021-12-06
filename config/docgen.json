@@ -1,5 +1,8 @@
 {
   "templateDirectory": "/home/ivo/projects/os/docgen/config",
   "sourceDirectory": "/home/ivo/Documents/Test",
-  "targetDirectory": "/home/ivo/Downloads/output"
+  "targetDirectory": "/home/ivo/Downloads/output",
+  "index": {
+    "includeNavigation": true
+  }
 }

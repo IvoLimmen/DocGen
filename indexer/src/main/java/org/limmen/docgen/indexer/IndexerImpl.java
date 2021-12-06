@@ -30,11 +30,16 @@ public class IndexerImpl implements Indexer {
 
   @Override
   public void addNewLink(Path targetFile) {
-    this.files.add(fileSystemHelper.toTargetPathFromRoot(targetFile));
+    var file = fileSystemHelper.toTargetPathFromRoot(targetFile);
+    this.files.add(file);
   }
 
   public Set<Path> getFiles() {
     return this.files;
+  }
+
+  public String toLink(String name) {
+    return name.replace(' ', '_');
   }
 
   public List<String> getFoldersIndex(int index) {
@@ -60,10 +65,10 @@ public class IndexerImpl implements Indexer {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-
     
     try {
       cfg.setSharedVariable("helper", this.fileSystemHelper);
+      cfg.setSharedVariable("config", this.config.getIndex());
     } catch (TemplateModelException e) {
       e.printStackTrace();
     }

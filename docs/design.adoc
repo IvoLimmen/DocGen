@@ -4,4 +4,25 @@
 
 Will convert as much as possible to generate one documentation hub from a set of input files.
 
-The input should be a configuration file that contains a input directory and a set of rules so it knows how to generate the index.
+The input should be a configuration file that contains a input directory and a set of rules so it 
+knows how to generate the index.
+
+## Requirements / limitations
+
+### Directory structure 
+
+Use a maximum of 3 directories deep, mainly used in this form:
+
+* Team directory
+
+** Product directory
+
+*** Extra directory (for grouping purposes)
+
+Files can be places everywhere, so you do not need to go 3 deep but 3 deep is the maximum that is 
+generated in the index.
+
+### Files that use imports
+
+Because the software will convert every `adoc` file it can find it is better to use a different file 
+extention for included files; otherwise the includes will show up in the index.
