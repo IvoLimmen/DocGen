@@ -11,7 +11,7 @@ public class Config {
 
   private String targetDirectory;
 
-  private Index index;
+  private IndexGenerator indexGenerator;
 
   public Path getSourceDirectory() {
     return Path.of(sourceDirectory);
@@ -37,17 +37,17 @@ public class Config {
     this.templateDirectory = templateDirectory;
   }
 
-  public Index getIndex() {
-    return index;
+  public IndexGenerator getIndexGenerator() {
+    return indexGenerator;
   }
 
-  public void setIndex(Index index) {
-    this.index = index;
+  public void setIndexGenerator(IndexGenerator indexGenerator) {
+    this.indexGenerator = indexGenerator;
   }
 
   @Override
   public String toString() {
-    return "Config [index=" + index + ", sourceDirectory=" + sourceDirectory + ", targetDirectory=" + targetDirectory
-        + ", templateDirectory=" + templateDirectory + "]";
+    return "Config [indexGenerator=" + indexGenerator + ", sourceDirectory=" + sourceDirectory + ", targetDirectory="
+        + targetDirectory + ", templateDirectory=" + templateDirectory + "]";
   }
 }

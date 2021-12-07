@@ -68,7 +68,7 @@ public class IndexGeneratorImpl implements IndexGenerator {
     
     try {
       cfg.setSharedVariable("helper", this.fileSystemHelper);
-      cfg.setSharedVariable("config", this.config.getIndex());
+      cfg.setSharedVariable("config", this.config.getIndexGenerator());
     } catch (TemplateModelException e) {
       e.printStackTrace();
     }

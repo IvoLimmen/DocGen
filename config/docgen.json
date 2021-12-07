@@ -2,7 +2,14 @@
   "templateDirectory": "/home/ivo/projects/os/docgen/config",
   "sourceDirectory": "/home/ivo/Documents/Test",
   "targetDirectory": "/home/ivo/Downloads/output",
-  "index": {
-    "includeNavigation": true
+  "indexGenerator": {
+    "includeNavigation": true,
+    "footer": {
+      "copyright": "© 2021 Copyright",
+      "link": {
+        "name": "DocGen",
+        "url": "https://github.com/IvoLimmen/DocGen"
+      }
+    }
   }
 }
