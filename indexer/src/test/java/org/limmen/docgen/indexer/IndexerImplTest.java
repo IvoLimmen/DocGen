@@ -13,7 +13,7 @@ import org.limmen.docgen.model.Config;
 
 public class IndexerImplTest {
 
-  private IndexerImpl subject;
+  private IndexGeneratorImpl subject;
 
   @BeforeEach
   void init() {
@@ -23,7 +23,7 @@ public class IndexerImplTest {
     config.setTemplateDirectory("/home/ivo/projects/os/docgen/config");
     var fileSystemHelper = new FileSystemHelper(config);
 
-    subject = new IndexerImpl(config, fileSystemHelper);
+    subject = new IndexGeneratorImpl(config, fileSystemHelper);
   }
 
   @Test

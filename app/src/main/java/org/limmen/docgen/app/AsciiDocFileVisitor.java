@@ -9,15 +9,15 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.Indexer;
+import org.limmen.docgen.domain.IndexGenerator;
 
 public class AsciiDocFileVisitor implements FileVisitor<Path> {
 
   private AsciiDocConverter asciiDocConverter;
   private FileSystemHelper fileSystemHelper;
-  private Indexer indexer;
+  private IndexGenerator indexer;
 
-  public AsciiDocFileVisitor(AsciiDocConverter asciiDocConverter, Indexer indexer, FileSystemHelper fileSystemHelper) {
+  public AsciiDocFileVisitor(AsciiDocConverter asciiDocConverter, IndexGenerator indexer, FileSystemHelper fileSystemHelper) {
     this.asciiDocConverter = asciiDocConverter;
     this.fileSystemHelper = fileSystemHelper;
     this.indexer = indexer;

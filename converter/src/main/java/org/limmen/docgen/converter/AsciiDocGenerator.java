@@ -26,17 +26,17 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 
-public class Generator {
+public class AsciiDocGenerator {
 
   private AsciiDoc adoc;
 
   private List<Path> generated = new ArrayList<>();
 
-  public Generator() {
+  public AsciiDocGenerator() {
   }
 
   public void generate(Path inputFile, Path outputDir) throws IOException {
-System.out.println(inputFile);
+
     var fileName = inputFile.getFileName().toString();
     fileName = fileName.substring(0, fileName.indexOf("."));
     var outputFile = Path.of(outputDir.toString(), fileName + ".adoc");

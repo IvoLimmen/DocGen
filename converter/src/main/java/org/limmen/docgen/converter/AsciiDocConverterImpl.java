@@ -36,7 +36,7 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
 
   private void convertSwaggerFileToHtml(Path sourceFile) throws IOException {
 
-    Generator generator = new Generator();
+    AsciiDocGenerator generator = new AsciiDocGenerator();
     generator.generate(sourceFile, sourceFile.getParent());
   }
 

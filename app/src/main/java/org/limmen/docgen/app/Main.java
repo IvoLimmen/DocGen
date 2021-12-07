@@ -6,22 +6,22 @@ import java.nio.file.Path;
 
 import org.limmen.docgen.converter.AsciiDocConverterImpl;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.Indexer;
-import org.limmen.docgen.indexer.IndexerImpl;
+import org.limmen.docgen.domain.IndexGenerator;
+import org.limmen.docgen.indexer.IndexGeneratorImpl;
 import org.limmen.docgen.model.Config;
 import org.limmen.docgen.model.helper.Json;
 
 public class Main {
 
   private FileSystemHelper fileSystemHelper;
-  private Indexer indexer;
+  private IndexGenerator indexer;
   private Config config;
 
   private Main() throws IOException {
 
     this.config = Json.load(Path.of(System.getProperty("user.dir"), "config", "docgen.json"));
     this.fileSystemHelper = new FileSystemHelper(config);
-    this.indexer = new IndexerImpl(config, fileSystemHelper);
+    this.indexer = new IndexGeneratorImpl(config, fileSystemHelper);
 
     this.walkThroughFiles();
   }

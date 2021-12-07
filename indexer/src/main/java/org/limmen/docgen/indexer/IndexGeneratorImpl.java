@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.Indexer;
+import org.limmen.docgen.domain.IndexGenerator;
 import org.limmen.docgen.model.Config;
 
 import freemarker.template.Configuration;
@@ -17,13 +17,13 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.TemplateModelException;
 
-public class IndexerImpl implements Indexer {
+public class IndexGeneratorImpl implements IndexGenerator {
 
   private FileSystemHelper fileSystemHelper;
   private Config config;
   private Set<Path> files = new TreeSet<>();
 
-  public IndexerImpl(Config config, FileSystemHelper fileSystemHelper) {
+  public IndexGeneratorImpl(Config config, FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper = fileSystemHelper;
     this.config = config;
   }
