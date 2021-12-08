@@ -34,7 +34,6 @@
   <!-- Show link -->  
   <a href="${helper.toRelativeLink(file)}">${helper.getFileName(file)}</a>
 </#list>
-
 </body>
 </html>
 <#include "footer.ftl">

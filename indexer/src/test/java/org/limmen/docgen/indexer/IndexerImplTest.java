@@ -22,8 +22,9 @@ public class IndexerImplTest {
     config.setTargetDirectory("/home/ivo/Downloads/output");
     config.setTemplateDirectory("/home/ivo/projects/os/docgen/config");
     var fileSystemHelper = new FileSystemHelper(config);
+    var tokenizer = new Tokenizer();
 
-    subject = new IndexGeneratorImpl(config, fileSystemHelper);
+    subject = new IndexGeneratorImpl(config, fileSystemHelper, tokenizer);
   }
 
   @Test

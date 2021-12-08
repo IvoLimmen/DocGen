@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
+import org.limmen.docgen.domain.IndexNode;
 import org.limmen.docgen.model.Config;
 
 import freemarker.template.Configuration;
@@ -19,13 +20,23 @@ import freemarker.template.TemplateModelException;
 
 public class IndexGeneratorImpl implements IndexGenerator {
 
+  private Tokenizer tokenizer;
   private FileSystemHelper fileSystemHelper;
   private Config config;
   private Set<Path> files = new TreeSet<>();
 
-  public IndexGeneratorImpl(Config config, FileSystemHelper fileSystemHelper) {
+  public IndexGeneratorImpl(Config config, FileSystemHelper fileSystemHelper, Tokenizer tokenizer) {
     this.fileSystemHelper = fileSystemHelper;
     this.config = config;
+    this.tokenizer = tokenizer;
+  }
+
+  @Override
+  public void addIndexNode(IndexNode indexNode) {    
+    System.out.println(IndexNode.builder()
+        .from(indexNode)
+        .keywords(tokenizer.tokenize(indexNode.getRawText()))
+        .build());    
   }
 
   @Override
