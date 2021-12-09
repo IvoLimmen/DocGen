@@ -7,6 +7,12 @@ Will convert as much as possible to generate one documentation hub from a set of
 The input should be a configuration file that contains a input directory and a set of rules so it 
 knows how to generate the index.
 
+It should be your central point for all documentation in an organisation. All companies have the 
+abillity to standardize; something that can not be done in the wild internet.
+
+So this tool centralizes and standardizes. It standardizes on the use of AsciiDoc for all the 
+manually written documentation. Swagger version 3 for all REST endpoints.
+
 ## Requirements / limitations
 
 ### Directory structure 
