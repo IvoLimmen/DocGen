@@ -44,7 +44,10 @@ public class IndexGeneratorImpl implements IndexGenerator {
 
   @Override
   public void addIndexNode(IndexNode indexNode) {
-     
+    if (!this.config.getIndexGenerator().isIncludeSearch()) {
+      return;
+    } 
+
     var keywords = tokenizer.tokenize(indexNode.getRawText());
     
     List<IndexItem> indexItems = keywords.stream()
@@ -136,11 +139,13 @@ public class IndexGeneratorImpl implements IndexGenerator {
       te.printStackTrace();
     }
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    for (var entry : indexes.entrySet()) {
-      var file = Path.of(this.config.getTargetDirectory().toString(), "data", entry.getKey() + ".json");
-      Files.createDirectories(file.getParent());
-      Files.writeString(file, objectMapper.writeValueAsString(entry.getValue()));
-    }
+    if (this.config.getIndexGenerator().isIncludeSearch()) {
+      ObjectMapper objectMapper = new ObjectMapper();
+      for (var entry : indexes.entrySet()) {
+        var file = Path.of(this.config.getTargetDirectory().toString(), "data", entry.getKey() + ".json");
+        Files.createDirectories(file.getParent());
+        Files.writeString(file, objectMapper.writeValueAsString(entry.getValue()));
+      }
+    } 
   }
 }
