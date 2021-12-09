@@ -13,7 +13,8 @@ The configuration file has the following properties.
   "targetDirectory": "directory to write to",
   "indexGenerator": {
     "includeNavigation": true, <1>
-    "footer": { <2>
+    "includeSearch": true, <2>
+    "footer": { <3>
       "copyright": "© 2021 Copyright",
       "link": {
         "name": "DocGen",
@@ -24,7 +25,19 @@ The configuration file has the following properties.
 }
 ----
 <1> Either `true` or `false`. Will add a nice navigation bar on top.
-<2> Adding this part will show a nice footer at the bottom.
+<2> Either `true` or `false`. Will add a search option in the navigation bar on top. Can be without the navigation.
+<3> Adding this part will show a nice footer at the bottom.
+
+## Testing the generated site
+
+When you want to test the features like searching you need to access the generated site using a webserver. 
+You can open a terminal, go to the output directory you configured and run:
+
+.Running a webserver
+[source,bash]
+----
+> python3 -m http.server 8080
+----
 
 ## What does the JSON/YML Swagger to AsciiDoc converter, convert?
 

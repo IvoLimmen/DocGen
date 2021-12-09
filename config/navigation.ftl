@@ -1,7 +1,9 @@
-<#if config.isIncludeNavigation()>
+<#if config.isIncludeNavigation() || config.isIncludeSearch()>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+<#if config.isIncludeNavigation()>      
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
 <#assign h1></#assign>
@@ -30,6 +32,13 @@
             </ul>
           </li>
         </ul>
+</#if>        
+<#if config.isIncludeSearch()>
+        <div class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInput">
+          <button class="btn btn-outline-success" id="searchButton">Search</button>
+        </div>
+</#if>
       </div>
     </div>
   </nav>

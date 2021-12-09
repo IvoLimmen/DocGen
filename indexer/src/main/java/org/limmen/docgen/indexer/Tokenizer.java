@@ -35,6 +35,6 @@ public class Tokenizer {
   }
   
   private String stripSpecialCharacters(String raw) {
-    return raw.replaceAll("[^\\w\\s]", "");
+    return raw.replaceAll("[^\\w\\s]", "").replace("_", "");
   }
 }

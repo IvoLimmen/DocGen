@@ -1,9 +1,10 @@
 {
-  "templateDirectory": "/home/ivo/projects/os/docgen/config",
+  "templateDirectory": "/home/ivo/projects/os/DocGen/config",
   "sourceDirectory": "/home/ivo/Documents/Test",
   "targetDirectory": "/home/ivo/Downloads/output",
   "indexGenerator": {
     "includeNavigation": true,
+    "includeSearch": true,
     "footer": {
       "copyright": "© 2021 Copyright",
       "link": {

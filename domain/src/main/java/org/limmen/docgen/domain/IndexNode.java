@@ -1,8 +1,6 @@
 package org.limmen.docgen.domain;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class IndexNode {
@@ -11,7 +9,6 @@ public class IndexNode {
   private String linkPart;
   private Path targetFile;
   private String rawText;
-  private List<String> keywords = new ArrayList<>();
 
   public static Builder builder() {
     return new Builder();      
@@ -23,12 +20,11 @@ public class IndexNode {
     private String linkPart;
     private Path targetFile;
     private String rawText;
-    private List<String> keywords = new ArrayList<>();
     
     public Builder() {
     }
 
-    Builder(String sectionName, String linkPart, Path targetFile, String rawText, List<String> keyworkds) {
+    Builder(String sectionName, String linkPart, Path targetFile, String rawText) {
       this.sectionName = sectionName;
       this.linkPart = linkPart;
       this.targetFile = targetFile;
@@ -40,12 +36,6 @@ public class IndexNode {
       this.rawText = source.rawText;
       this.sectionName = source.sectionName;
       this.targetFile = source.targetFile;      
-      return Builder.this;
-    }
-
-    public Builder keywords(List<String> keywords) {
-      this.keywords.clear();
-      this.keywords.addAll(keywords);
       return Builder.this;
     }
 
@@ -79,7 +69,6 @@ public class IndexNode {
     this.linkPart = builder.linkPart;
     this.targetFile = builder.targetFile;
     this.rawText = builder.rawText;
-    this.keywords = builder.keywords;
   }
 
   public String getSectionName() {
@@ -98,19 +87,9 @@ public class IndexNode {
     return rawText;
   }
 
-  public List<String> getKeywords() {
-    return keywords;
-  }
-
-  @Override
-  public String toString() {
-    return "IndexNode [keywords=" + keywords + ", linkPart=" + linkPart + ", rawText=" + rawText + ", sectionName="
-        + sectionName + ", targetFile=" + targetFile + "]";
-  }
-
   @Override
   public int hashCode() {
-    return Objects.hash(keywords, linkPart, rawText, sectionName, targetFile);
+    return Objects.hash(linkPart, rawText, sectionName, targetFile);
   }
 
   @Override
@@ -125,8 +104,7 @@ public class IndexNode {
       return false;
     }
     IndexNode other = (IndexNode) obj;
-    return Objects.equals(keywords, other.keywords) && Objects.equals(linkPart, other.linkPart)
-        && Objects.equals(rawText, other.rawText) && Objects.equals(sectionName, other.sectionName)
-        && Objects.equals(targetFile, other.targetFile);
+    return Objects.equals(linkPart, other.linkPart) && Objects.equals(rawText, other.rawText)
+        && Objects.equals(sectionName, other.sectionName) && Objects.equals(targetFile, other.targetFile);
   }
 }

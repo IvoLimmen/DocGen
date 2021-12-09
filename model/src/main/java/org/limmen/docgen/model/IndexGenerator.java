@@ -2,7 +2,9 @@ package org.limmen.docgen.model;
 
 public class IndexGenerator {
   
-  private boolean includeNavigation;  
+  private boolean includeNavigation;
+
+  private boolean includeSearch;
 
   private Footer footer;
 
@@ -24,5 +26,13 @@ public class IndexGenerator {
 
   public void setIncludeNavigation(boolean includeNavigation) {
     this.includeNavigation = includeNavigation;
+  }
+
+  public boolean isIncludeSearch() {
+    return includeSearch;
+  }
+  
+  public void setIncludeSearch(boolean includeSearch) {
+    this.includeSearch = includeSearch;
   }
 }

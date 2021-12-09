@@ -34,12 +34,15 @@ After compiling you can run:
 
 See the documentation in the docs directory for more information
 
+## Features
+
+* Converts AsciiDoc files
+* Creates an index
+* Indexes you files for searching
 ## Current status
 
 Works but is really basic. Following needs to be done:
 
 - [ ] Add logging.
-- [ ] Improve the indexer to make the index look more nice.
-- [ ] Add customisation options for the index generation.
 - [ ] Add customisation options for customisation on output of AsciiDoc generation (CSS)
 - [ ] Add extra PDF output for download options (?)
