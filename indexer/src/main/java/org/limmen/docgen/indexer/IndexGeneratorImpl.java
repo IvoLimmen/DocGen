@@ -67,9 +67,9 @@ public class IndexGeneratorImpl implements IndexGenerator {
           list.add(indexItem);
         }
       } else {
-        List<IndexItem> set = new ArrayList<>();
-        set.add(indexItem);
-        indexes.put(key, set);
+        List<IndexItem> list = new ArrayList<>();
+        list.add(indexItem);
+        indexes.put(key, list);
       }
     });    
   }
@@ -141,11 +141,15 @@ public class IndexGeneratorImpl implements IndexGenerator {
 
     if (this.config.getIndexGenerator().isIncludeSearch()) {
       ObjectMapper objectMapper = new ObjectMapper();
-      for (var entry : indexes.entrySet()) {
+      for (var entry : getIndexes().entrySet()) {
         var file = Path.of(this.config.getTargetDirectory().toString(), "data", entry.getKey() + ".json");
         Files.createDirectories(file.getParent());
         Files.writeString(file, objectMapper.writeValueAsString(entry.getValue()));
       }
     } 
+  }
+
+  public Map<String, List<IndexItem>> getIndexes() {
+    return indexes;
   }
 }
