@@ -2,6 +2,7 @@ package org.limmen.docgen.indexer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,6 +10,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.limmen.docgen.domain.FileSystemHelper;
+import org.limmen.docgen.domain.SearchIndexGenerator;
 import org.limmen.docgen.model.Config;
 
 public class IndexerImplTest {
@@ -22,9 +24,8 @@ public class IndexerImplTest {
     config.setTargetDirectory("/home/ivo/Downloads/output");
     config.setTemplateDirectory("/home/ivo/projects/os/docgen/config");
     var fileSystemHelper = new FileSystemHelper(config);
-    var tokenizer = new Tokenizer();
-
-    subject = new IndexGeneratorImpl(config, fileSystemHelper, tokenizer);
+    var searchIndexGenerator = mock(SearchIndexGenerator.class);
+    subject = new IndexGeneratorImpl(config, fileSystemHelper, searchIndexGenerator);
   }
 
   @Test

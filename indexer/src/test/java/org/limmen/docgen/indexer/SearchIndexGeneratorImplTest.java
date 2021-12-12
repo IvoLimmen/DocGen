@@ -15,7 +15,7 @@ import org.limmen.docgen.model.IndexGenerator;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class IndexGeneratorImplTest {
+public class SearchIndexGeneratorImplTest {
 
   private Config config = new Config();
 
@@ -23,11 +23,11 @@ public class IndexGeneratorImplTest {
   
   private Tokenizer tokenizer = new Tokenizer();
 
-  private IndexGeneratorImpl subject;
+  private SearchIndexGeneratorImpl subject;
 
   @BeforeEach
   void init() {
-    subject = new IndexGeneratorImpl(config, fileSystemHelper, tokenizer);
+    subject = new SearchIndexGeneratorImpl(config, fileSystemHelper, tokenizer);
   }
 
   @Test
@@ -103,5 +103,4 @@ public class IndexGeneratorImplTest {
     this.config.setSourceDirectory("/home/build/target/");
     this.config.setIndexGenerator(new IndexGenerator());
     this.config.getIndexGenerator().setIncludeSearch(true);
-  }
-}
+  }}

@@ -81,13 +81,12 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
   private void analyzeBlock(Section section, Block block, Path targetFile) {
     var text = block.getLines().stream().collect(Collectors.joining(" "));
 
-    this.indexGenerator.addIndexNode(IndexNode.builder()
+    this.indexGenerator.getSearchIndexGenerator().addIndexNode(IndexNode.builder()
         .linkPart(section.getId())
         .sectionName(section.getTitle())
         .rawText(section.getTitle() + " " + text)
         .targetFile(targetFile)
         .build());
-
   }
 
   private void convertAsciiDocToHtml(Path sourceFile, Path targetFile) throws IOException {
