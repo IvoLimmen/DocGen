@@ -34,10 +34,13 @@
     return s.join("");
   } 
 
-  function createLink(link, keyword) {
+  function createLink(link, keyword, exact) {
     let li = document.createElement('li');
     let a = document.createElement('a');
     let title = keyword + ': ' + link.sectionName;
+    if (exact === true) {
+      a.className = 'exact';
+    }
     a.title = title;
     a.href = link.targetFile + '#' + link.link;
     a.textContent = title;
@@ -62,12 +65,15 @@
           if (result.keyword === keyword) {            
             found = true;
             result.links.forEach((match) => {
-              ul.appendChild(createLink(match, result.keyword));
+              ul.appendChild(createLink(match, result.keyword, true));
             });
-          } else if (result.soundex === search) {
+          }
+        });
+        data.forEach((result) => {
+          if (result.soundex === search && result.keyword !== keyword) {
             found = true;
             result.links.forEach((match) => {
-              ul.appendChild(createLink(match, result.keyword));
+              ul.appendChild(createLink(match, result.keyword, false));
             });
           }
         });
