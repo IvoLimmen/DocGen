@@ -14,8 +14,10 @@ import org.limmen.docgen.indexer.Tokenizer;
 import org.limmen.docgen.model.Config;
 import org.limmen.docgen.model.helper.Json;
 
-public class Main {
+import ch.qos.logback.classic.ClassicConstants;
 
+public class Main {
+  
   private FileSystemHelper fileSystemHelper;
   private IndexGenerator indexGenerator;
   private SearchIndexGenerator searchIndexGenerator;
@@ -23,6 +25,7 @@ public class Main {
   private Config config;
 
   private Main() throws IOException {
+    System.setProperty(ClassicConstants.CONFIG_FILE_PROPERTY, Path.of(System.getProperty("user.dir"), "config", "logback.xml").toString());
 
     this.config = Json.load(Path.of(System.getProperty("user.dir"), "config", "docgen.json"));
     this.fileSystemHelper = new FileSystemHelper(config);
@@ -42,9 +45,11 @@ public class Main {
     var converter = new AsciiDocConverterImpl(fileSystemHelper, indexGenerator);
     var supportFileVisitor = new SupportFileVisitor(fileSystemHelper);
     var asciiDocfileVisitor = new AsciiDocFileVisitor(converter, indexGenerator, fileSystemHelper);
-
+    
     Files.walkFileTree(config.getSourceDirectory(), asciiDocfileVisitor);
+
     Files.walkFileTree(config.getSourceDirectory(), supportFileVisitor);
+
     indexGenerator.generate();
   }
 }

@@ -13,6 +13,8 @@ import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
 import org.limmen.docgen.domain.SearchIndexGenerator;
 import org.limmen.docgen.model.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -21,6 +23,8 @@ import freemarker.template.TemplateModelException;
 
 public class IndexGeneratorImpl implements IndexGenerator {
 
+  private final static Logger log = LoggerFactory.getLogger(IndexGeneratorImpl.class);
+  
   private SearchIndexGenerator searchIndexGenerator;
   private FileSystemHelper fileSystemHelper;
   private Config config;
@@ -57,6 +61,8 @@ public class IndexGeneratorImpl implements IndexGenerator {
 
   @Override
   public void generate() throws IOException {
+    log.info("Generating indexfile for documentation site");
+
     Configuration cfg;
     try {
       cfg = new Configuration(Configuration.VERSION_2_3_29);

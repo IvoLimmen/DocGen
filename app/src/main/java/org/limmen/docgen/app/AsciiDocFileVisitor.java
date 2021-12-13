@@ -31,7 +31,7 @@ public class AsciiDocFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (extention.equals("adoc")) {
+    if (this.asciiDocConverter.canConvertFile(extention)) {
       Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
       Files.createDirectories(targetFile.getParent());
       this.asciiDocConverter.convertToHtml(file, targetFile);

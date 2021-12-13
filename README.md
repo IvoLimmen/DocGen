@@ -43,6 +43,5 @@ See the documentation in the docs directory for more information
 
 Works but is really basic. Following needs to be done:
 
-- [ ] Add logging.
 - [ ] Add customisation options for customisation on output of AsciiDoc generation (CSS)
 - [ ] Add extra PDF output for download options (?)

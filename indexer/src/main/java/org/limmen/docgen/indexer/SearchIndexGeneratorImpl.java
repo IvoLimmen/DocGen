@@ -17,9 +17,13 @@ import org.limmen.docgen.domain.IndexLink;
 import org.limmen.docgen.domain.IndexNode;
 import org.limmen.docgen.domain.SearchIndexGenerator;
 import org.limmen.docgen.model.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SearchIndexGeneratorImpl implements SearchIndexGenerator {
 
+  private final static Logger log = LoggerFactory.getLogger(SearchIndexGeneratorImpl.class);
+  
   private Soundex soundex = new Soundex();
   private Map<String, List<IndexItem>> indexes = new HashMap<>();
   private Tokenizer tokenizer;
@@ -79,9 +83,11 @@ public class SearchIndexGeneratorImpl implements SearchIndexGenerator {
   @Override
   public void generate() throws IOException {
     if (this.config.getIndexGenerator().isIncludeSearch()) {
+      log.info("Generating index files for searching");
       ObjectMapper objectMapper = new ObjectMapper();
       for (var entry : getIndexes().entrySet()) {
         var file = Path.of(this.config.getTargetDirectory().toString(), "data", entry.getKey() + ".json");
+        log.debug("Writing index file {}", file.toString());
         Files.createDirectories(file.getParent());
         Files.writeString(file, objectMapper.writeValueAsString(entry.getValue()));
       }

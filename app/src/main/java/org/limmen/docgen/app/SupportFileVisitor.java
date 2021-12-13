@@ -10,10 +10,16 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
 import org.limmen.docgen.domain.FileSystemHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SupportFileVisitor implements FileVisitor<Path> {
 
+  private final static Logger log = LoggerFactory.getLogger(SupportFileVisitor.class);
+  
   private FileSystemHelper fileSystemHelper;
+
+  private final List<String> supportedSupportFiles = List.of("png", "apng", "jpg", "jpeg", "gif");
 
   public SupportFileVisitor(FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper = fileSystemHelper;
@@ -27,7 +33,8 @@ public class SupportFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (List.of("png", "apng", "jpg", "jpeg", "gif").contains(extention)) {
+    if (supportedSupportFiles.contains(extention)) {
+      log.info("Copy support file {} to target directory", file);
       Path targetFile = this.fileSystemHelper.toTargetPath(file);
       Files.createDirectories(targetFile.getParent());
       Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
