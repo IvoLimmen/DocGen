@@ -50,11 +50,11 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
   public void convertToHtml(Path sourceFile, Path targetFile) throws IOException {
     if (sourceFile.toString().endsWith("json") || sourceFile.toString().endsWith("yml") || sourceFile.toString().endsWith("yaml")) {      
       convertSwagger3FileToAsciiDoc(sourceFile);
-      analyzer(sourceFile, targetFile);
+      analyzerAsciiDocForSearchIndex(sourceFile, targetFile);
       convertAsciiDocToHtml(this.fileSystemHelper.changeExtention(sourceFile, ".adoc"), targetFile);
     }
     if (sourceFile.toString().endsWith("adoc")) {
-      analyzer(sourceFile, targetFile);
+      analyzerAsciiDocForSearchIndex(sourceFile, targetFile);
       convertAsciiDocToHtml(sourceFile, targetFile);
     }
   }
@@ -65,7 +65,7 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
     generator.generate(sourceFile, sourceFile.getParent());
   }
 
-  private void analyzer(Path sourceFile, Path targetFile) throws IOException {
+  private void analyzerAsciiDocForSearchIndex(Path sourceFile, Path targetFile) throws IOException {
     log.info("Analyze {} for indexing", sourceFile);
 
     var document = asciidoctor.loadFile(

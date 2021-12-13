@@ -3,24 +3,21 @@ package org.limmen.docgen.app;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.IndexGenerator;
 
-public class AsciiDocFileVisitor implements FileVisitor<Path> {
+public class FileFinderVisitor implements FileVisitor<Path> {
 
-  private AsciiDocConverter asciiDocConverter;
+  private List<Path> files = new ArrayList<>();
+  
   private FileSystemHelper fileSystemHelper;
-  private IndexGenerator indexer;
 
-  public AsciiDocFileVisitor(AsciiDocConverter asciiDocConverter, IndexGenerator indexer, FileSystemHelper fileSystemHelper) {
-    this.asciiDocConverter = asciiDocConverter;
+  public FileFinderVisitor(FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper = fileSystemHelper;
-    this.indexer = indexer;
   }
 
   @Override
@@ -31,11 +28,8 @@ public class AsciiDocFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (this.asciiDocConverter.canConvertFile(extention)) {
-      Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
-      Files.createDirectories(targetFile.getParent());
-      this.asciiDocConverter.convertToHtml(file, targetFile);
-      this.indexer.addNewLink(targetFile);  
+    if (extention.equals("adoc")) {
+      this.files.add(file);
     }
     return FileVisitResult.CONTINUE;
   }
@@ -48,5 +42,9 @@ public class AsciiDocFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
     return FileVisitResult.CONTINUE;
+  }
+
+  public List<Path> getFiles() {
+    return files;
   }
 }
