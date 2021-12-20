@@ -3,21 +3,20 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.limmen.docgen</groupId>
-  <artifactId>docgen-project</artifactId>
+  <groupId>org.limmen.zenodotus</groupId>
+  <artifactId>zenodotus-project</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>DocGen - Project</name>
+  <name>Zenodotus - Project</name>
 
   <modules>
-    <module>app</module>
-    <module>model</module>
-    <module>converter</module>
-    <module>domain</module>
-    <module>indexer</module>
+    <module>docgen</module>
+    <module>maven-analyser</module>
   </modules>
 
   <properties>
+    <maven-core.version>3.8.4</maven-core.version>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
@@ -79,6 +78,11 @@
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
         <version>1.15</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-core</artifactId>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <!-- logging -->

@@ -1,47 +1,25 @@
-# DocGen
+# Zenodotus
 
-Application that generates a documentation hub from a specified directory and adds an index file.
+Zenodotus was the first superintendent of the Library of Alexandria.
+Since this tool is to build a large centralised library of documentation it's a fitting name.
 
-Converts:
+## What is this set of tools?
 
-* Swagger 3 YML and JSON files to HTML
-* Converts AsciiDoc files to HTML
+The goals of this project is the following:
 
-Generates:
+* to centralise documentation.
+* to make this as easy as possible.
 
-* Index.html files
+This does require some requirements:
+* to standardise on AsciiDoc for documentation.
+* to standardise on Swagger for REST documentation.
+* to standardise on Maven as build tool.
 
-## Requirements
+## What tools are there?
 
-Minimal requirements:
+* [DocGen](docgen/README.md) for generating a static website.
+* [Maven-Analiser](maven-analyser/README.md) for generating dependency information.
 
-* Java 17 or higher
-* Maven 3.8.* or higher
+## Read more
 
-## Building the application
-
-Run:
-
-    mvn clean install
-
-## Running the application
-
-After compiling you can run:
-
-    mvn -pl app exec:java
-
-## More information
-
-See the documentation in the docs directory for more information
-
-## Features
-
-* Converts AsciiDoc files
-* Creates an index
-* Indexes you files for searching
-## Current status
-
-Works but is really basic. Following needs to be done:
-
-- [ ] Add customisation options for customisation on output of AsciiDoc generation (CSS)
-- [ ] Add extra PDF output for download options (?)
+[Technical design](docs/technical.adoc)

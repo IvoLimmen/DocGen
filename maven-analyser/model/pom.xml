@@ -4,27 +4,27 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.limmen.docgen</groupId>
-    <artifactId>docgen-project</artifactId>
+    <groupId>org.limmen.maven-analyser</groupId>
+    <artifactId>maven-analyser-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <name>DocGen - Model</name>
-  <artifactId>docgen-model</artifactId>
+  <name>Maven-Analyser - Model</name>
+  <artifactId>maven-analyser-model</artifactId>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-xml</artifactId>
-    </dependency>      
-  <dependency>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-    </dependency>    
+    </dependency>
   </dependencies>
 </project>
