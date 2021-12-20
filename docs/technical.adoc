@@ -35,10 +35,25 @@ The configuration file has the following properties.
 When you want to test the features like searching you need to access the generated site using a webserver. 
 You can open a terminal, go to the output directory you configured and run:
 
-.Running a webserver
+.Running a webserver using Python
 [source,bash]
 ----
-> python3 -m http.server 8080
+$ python3 -m http.server 8080
+----
+
+or:
+
+.Running a webserver using PHP
+[source,bash]
+----
+$ php -S localhost:8080
+----
+
+.Running a webserver using Node
+[source,bash]
+----
+$ npm install -g node-static
+$ static -p 8000
 ----
 
 ### What does the JSON/YML Swagger to AsciiDoc converter, convert?
