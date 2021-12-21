@@ -3,44 +3,50 @@ package org.limmen.analyser.domain;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.limmen.analyser.model.MavenDependency;
-import org.limmen.analyser.model.MavenProject;
+import org.limmen.zenodotus.project.model.Dependency;
+import org.limmen.zenodotus.project.model.Project;
 
 public class ProjectAnalyser {
 
-  public MavenProject analyse(Path pomFile, String companyName) {
+  public Project analyse(Path pomFile, Project project, String companyName) {
     MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
-    MavenProject project = new MavenProject();
+    Project.Builder builder = Project.builder();
 
     try {
       try (var reader = new FileReader(pomFile.toFile())) {
 
         var model = xpp3Reader.read(reader);
 
-        project.setGroupId(model.getGroupId());
-        project.setArtifactId(model.getArtifactId());
-        project.setVersion(model.getVersion());
-        project.setDescription(model.getDescription());
-        project.setName(model.getName());
+        builder.groupId(model.getGroupId());
+        builder.artifactId(model.getArtifactId());
+        builder.version(model.getVersion());
+        builder.description(model.getDescription());
+        builder.name(model.getName());
 
-        var dependencies = model.getDependencyManagement().getDependencies();
-        var properties = model.getProperties();
+        if (model.getDependencyManagement() != null) {
+          List<Dependency> newDependencies = new ArrayList<>();
+          var dependencies = model.getDependencyManagement().getDependencies();
+          var properties = model.getProperties();
 
-        dependencies.stream()
-            .filter(dep -> dep.getGroupId().contains(companyName))
-            .forEach(dep -> {
+          dependencies.stream()
+              .filter(dep -> dep.getGroupId().contains(companyName))
+              .forEach(dep -> {
 
-              MavenDependency dependency = new MavenDependency();
-              dependency.setGroupId(dep.getGroupId());
-              dependency.setArtifactId(dep.getArtifactId());
-              dependency.setVersion(resolveProperties(dep.getVersion(), properties));
+                Dependency dependency = new Dependency();
+                dependency.setGroupId(dep.getGroupId());
+                dependency.setArtifactId(dep.getArtifactId());
+                dependency.setVersion(resolveProperties(dep.getVersion(), properties));
+                newDependencies.add(dependency);
+              });
+          builder.dependencies(newDependencies);
+        }
 
-              project.getDependencies().add(dependency);
-            });
       } catch (XmlPullParserException e) {
         // xml issue
       }
@@ -48,7 +54,7 @@ public class ProjectAnalyser {
       // io issue
     }
 
-    return project;
+    return builder.build();
   }
 
   private String resolveProperties(String version, Properties properties) {

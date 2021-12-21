@@ -1,6 +1,6 @@
-package org.limmen.analyser.model;
+package org.limmen.zenodotus.project.model;
 
-public class MavenDependency {
+public class Dependency {
   
   private String artifactId;
 

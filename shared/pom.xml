@@ -8,15 +8,13 @@
     <artifactId>zenodotus-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>  
   </parent>
-
-  <groupId>org.limmen.maven-analyser</groupId>
-  <artifactId>maven-analyser-project</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  
+  <groupId>org.limmen.zenodotus.shared</groupId>
+  <artifactId>zenodotus-shared-project</artifactId>
   <packaging>pom</packaging>
-  <name>Maven-Analyser - Project</name>
+  <name>Shared - Project</name>
 
   <modules>
-    <module>domain</module>
-    <module>app</module>
+    <module>model</module>
   </modules>
 </project>

@@ -1,0 +1,9 @@
+{
+  "artifactId" : "zenodotus-project",
+  "groupId" : "org.limmen.zenodotus",
+  "version" : "0.0.1-SNAPSHOT",
+  "name" : "Zenodotus - Project",
+  "description" : null,
+  "email" : null,
+  "dependencies" : [ ]
+}

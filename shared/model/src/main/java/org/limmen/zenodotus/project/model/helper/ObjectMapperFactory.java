@@ -1,4 +1,4 @@
-package org.limmen.analyser.model.helper;
+package org.limmen.zenodotus.project.model.helper;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
