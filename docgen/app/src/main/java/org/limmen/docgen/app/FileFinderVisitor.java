@@ -8,16 +8,20 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
 
 public class FileFinderVisitor implements FileVisitor<Path> {
 
   private List<Path> files = new ArrayList<>();
   
+  private AsciiDocConverter asciiDocConverter;
+
   private FileSystemHelper fileSystemHelper;
 
-  public FileFinderVisitor(FileSystemHelper fileSystemHelper) {
+  public FileFinderVisitor(FileSystemHelper fileSystemHelper, AsciiDocConverter asciiDocConverter) {
     this.fileSystemHelper = fileSystemHelper;
+    this.asciiDocConverter = asciiDocConverter;
   }
 
   @Override
@@ -28,7 +32,7 @@ public class FileFinderVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (extention.equals("adoc")) {
+    if (asciiDocConverter.canConvertFile(extention)) {
       this.files.add(file);
     }
     return FileVisitResult.CONTINUE;

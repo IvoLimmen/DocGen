@@ -29,16 +29,23 @@ public class Main {
   private Config config;
 
   private Main() throws IOException {
+    String configDir = System.getenv("CONFIG_DIR");
+
+    if (configDir == null) {
+      configDir = Path.of(System.getProperty("user.dir"), "config").toString();
+    }
+
     System.setProperty(ClassicConstants.CONFIG_FILE_PROPERTY,
-        Path.of(System.getProperty("user.dir"), "config", "logback.xml").toString());
+        Path.of(configDir, "logback.xml").toString());
 
-    this.config = Json.load(Path.of(System.getProperty("user.dir"), "config", "docgen.json"));
-
+    this.config = Json.load(Path.of(configDir, "docgen.json"));
+    this.config.setTemplateDirectory(configDir);
+    
     this.fileSystemHelper = new FileSystemHelper(config);
     this.tokenizer = new Tokenizer();
     this.searchIndexGenerator = new SearchIndexGeneratorImpl(config, fileSystemHelper, tokenizer);
     this.indexGenerator = new IndexGeneratorImpl(config, fileSystemHelper, searchIndexGenerator);
-    this.asciiDocConverter = new AsciiDocConverterImpl(fileSystemHelper, indexGenerator);
+    this.asciiDocConverter = new AsciiDocConverterImpl(config, fileSystemHelper, indexGenerator);
 
     this.walkThroughFiles();
   }
@@ -48,19 +55,19 @@ public class Main {
   }
 
   private List<Path> findFilesToConvert() throws IOException {
-    var fileFinderVisitor = new FileFinderVisitor(fileSystemHelper);
+    var fileFinderVisitor = new FileFinderVisitor(fileSystemHelper, this.asciiDocConverter);
     Files.walkFileTree(config.getSourceDirectory(), fileFinderVisitor);
 
     List<Path> includedFiles = new ArrayList<>();
-    fileFinderVisitor.getFiles().forEach(file -> {      
+    fileFinderVisitor.getFiles().forEach(file -> {
       findIncludes(file).forEach(i -> {
         includedFiles.add(Path.of(file.getParent().toString(), i));
       });
     });
 
     return fileFinderVisitor.getFiles().stream()
-      .filter(file -> !includedFiles.contains(file))
-      .toList();
+        .filter(file -> !includedFiles.contains(file))
+        .toList();
   }
 
   private void walkThroughFiles() throws IOException {
@@ -83,8 +90,8 @@ public class Main {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      this.indexGenerator.addNewLink(targetFile);  
-    }    
+      this.indexGenerator.addNewLink(targetFile);
+    }
   }
 
   private List<String> findIncludes(Path file) {

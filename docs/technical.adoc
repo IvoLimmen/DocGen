@@ -38,9 +38,6 @@ The configuration file has the following properties.
 [source,json]
 ----
 {
-  "templateDirectory": "full path to the directory with config and templates",
-  "sourceDirectory": "directory containing the source",
-  "targetDirectory": "directory to write to",
   "indexGenerator": {
     "includeNavigation": true, <1>
     "includeSearch": true, <2>
@@ -51,12 +48,18 @@ The configuration file has the following properties.
         "url": "https://github.com/IvoLimmen/Zenodotus"
       }
     }
-  }
+  },
+  "tableOfContent": "ON", <4>
+  "numberedSections": "ON", <5>
+  "sourceDirectory": "directory containing the source",
+  "targetDirectory": "directory to write to"
 }
 ----
 <1> Either `true` or `false`. Will add a nice navigation bar on top.
 <2> Either `true` or `false`. Will add a search option in the navigation bar on top. Can be without the navigation.
 <3> Adding this part will show a nice footer at the bottom.
+<4> Either `ON` to enable table of content for all files, `OFF` to disable, or `AS_DEFINED` by adoc file.
+<5> Either `ON` to enable numbered sections for all files, `OFF` to disable, or `AS_DEFINED` by adoc file.
 
 ### Testing the generated site
 

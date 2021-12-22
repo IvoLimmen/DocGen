@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.limmen.zenodotus.project.model.Project;
+import org.limmen.zenodotus.project.model.Team;
 
 public class Json {
   
@@ -19,11 +20,19 @@ public class Json {
         return mapper;
     }
 
-    public static Project load(Path fileName) throws IOException {
+    public static Project loadProject(Path fileName) throws IOException {
         return mapper().readValue(fileName.toFile(), Project.class);
     }
 
-    public static void save(Project project, Path fileName) throws JsonProcessingException, IOException {      
+    public static void saveProject(Project project, Path fileName) throws JsonProcessingException, IOException {      
       Files.writeString(fileName, mapper().writerWithDefaultPrettyPrinter().writeValueAsString(project));
     }
+
+    public static Team loadTeam(Path fileName) throws IOException {
+        return mapper().readValue(fileName.toFile(), Team.class);
+    }
+
+    public static void saveTeam(Team team, Path fileName) throws JsonProcessingException, IOException {      
+      Files.writeString(fileName, mapper().writerWithDefaultPrettyPrinter().writeValueAsString(team));
+    }    
 }

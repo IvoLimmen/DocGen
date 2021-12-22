@@ -17,11 +17,15 @@ import picocli.CommandLine.Option;
 public class Main implements Callable<Integer> {
 
   @Option(names = { "-d",
-      "--directory" }, description = "Directory that contains the pom.xml file to analyse and the project.json to fill")
+      "--directory" }, required = true, description = "Directory that contains the pom.xml file to analyse and the project.json to fill")
   private Path file;
 
-  @Option(names = { "-c", "--companyName" }, description = "The company name to search the dependencies of")
+  @Option(names = { "-c",
+      "--companyName" }, required = true, description = "The company name to search the dependencies of")
   private String companyName;
+
+  @Option(names = { "-h", "--help", "-?", "-help" }, usageHelp = true, description = "Display this help and exit")
+  private boolean help;
 
   @Override
   public Integer call() throws Exception {
@@ -32,26 +36,28 @@ public class Main implements Callable<Integer> {
       file = Path.of(System.getProperty("user.dir"));
     }
 
-    var project = projectAnalyser.analyse(
+    var project = loadProjectFile(Path.of(file.toString(), "project.json"));
+
+    var updatedProject = projectAnalyser.analyse(
         Path.of(file.toString(), "pom.xml"),
-        loadProjectFile(Path.of(file.toString(), "project.json")),
+        project,
         companyName);
 
-    saveProject(project);
+    saveProject(updatedProject);
 
     return 0;
   }
 
   private Project loadProjectFile(Path projectfile) throws IOException {
     try {
-      return Json.load(projectfile);
+      return Json.loadProject(projectfile);
     } catch (FileNotFoundException fnfe) {
       return Project.builder().build();
     }
   }
 
   private void saveProject(Project project) throws JsonProcessingException, IOException {
-    Json.save(project, Path.of(file.toString(), "project.json"));
+    Json.saveProject(project, Path.of(file.toString(), "project.json"));
   }
 
   public static void main(String[] args) throws Exception {

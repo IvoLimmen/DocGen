@@ -2,8 +2,8 @@ package org.limmen.docgen.converter;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -30,8 +30,6 @@ public class AsciiDocGenerator {
 
   private AsciiDoc adoc;
 
-  private List<Path> generated = new ArrayList<>();
-
   public AsciiDocGenerator() {
   }
 
@@ -40,6 +38,7 @@ public class AsciiDocGenerator {
     var fileName = inputFile.getFileName().toString();
     fileName = fileName.substring(0, fileName.indexOf("."));
     var outputFile = Path.of(outputDir.toString(), fileName + ".adoc");
+    Files.createDirectories(outputDir);
 
     ObjectMapper objectMapper;
     if (inputFile.toString().endsWith(".yml") || inputFile.toString().endsWith(".yaml")) {
@@ -58,8 +57,6 @@ public class AsciiDocGenerator {
       handlePathsSorted(openApi);
       handleComponentSorted(openApi.getComponents());
     }
-
-    generated.add(Path.of(fileName + ".adoc"));
   }
 
   private void handleInfo(Info info) {

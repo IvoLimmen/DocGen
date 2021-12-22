@@ -1,5 +1,6 @@
 {
-  "templateDirectory": "/home/ivo/projects/os/DocGen/config",
+  "tableOfContent": "ON",
+  "numberedSections": "ON",
   "sourceDirectory": "/home/ivo/Documents/Test",
   "targetDirectory": "/home/ivo/Downloads/output",
   "indexGenerator": {
