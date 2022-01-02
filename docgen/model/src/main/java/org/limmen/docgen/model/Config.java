@@ -5,6 +5,9 @@ import java.nio.file.Path;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.limmen.docgen.model.value.TocValue;
+import org.limmen.docgen.model.value.ToggleValue;
+
 public class Config {
 
   @JsonIgnore
@@ -14,25 +17,25 @@ public class Config {
 
   private String targetDirectory;
 
-  private Toggle tableOfContent;
+  private TocValue tableOfContent;
 
-  private Toggle numberedSections;
+  private ToggleValue numberedSections;
 
   private IndexGenerator indexGenerator;
 
-  public Toggle getNumberedSections() {
+  public ToggleValue getNumberedSections() {
     return numberedSections;
   }
 
-  public Toggle getTableOfContent() {
+  public TocValue getTableOfContent() {
     return tableOfContent;
   }
 
-  public void setNumberedSections(Toggle numberedSections) {
+  public void setNumberedSections(ToggleValue numberedSections) {
     this.numberedSections = numberedSections;
   }
 
-  public void setTableOfContent(Toggle tableOfContent) {
+  public void setTableOfContent(TocValue tableOfContent) {
     this.tableOfContent = tableOfContent;
   }
   

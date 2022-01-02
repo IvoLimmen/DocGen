@@ -21,7 +21,8 @@ import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
 import org.limmen.docgen.domain.IndexNode;
 import org.limmen.docgen.model.Config;
-import org.limmen.docgen.model.Toggle;
+import org.limmen.docgen.model.value.TocValue;
+import org.limmen.docgen.model.value.ToggleValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,16 +58,18 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
   private Attributes attributes(Config config) {
     AttributesBuilder builder = Attributes.builder();
 
-    if (config.getNumberedSections() == Toggle.ON) {
+    if (config.getNumberedSections() == ToggleValue.ON) {
       builder.arguments("sectnums");
-    } else if (config.getNumberedSections() == Toggle.OFF) {
+    } else if (config.getNumberedSections() == ToggleValue.OFF) {
       builder.arguments("!sectnums");
     }
 
-    if (config.getTableOfContent() == Toggle.ON) {
-      builder.arguments("toc");
-    } else if (config.getTableOfContent() == Toggle.OFF) {
-      builder.arguments("!toc");
+    if (config.getTableOfContent() != TocValue.AS_DEFINED) {
+      if (config.getTableOfContent() == TocValue.OFF) {
+        builder.arguments("!toc");
+      } else {
+        builder.attribute("toc", config.getTableOfContent().name().toLowerCase());
+      }
     }
 
     builder.docType("book");
