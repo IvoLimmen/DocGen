@@ -1,5 +1,7 @@
 dependency-reduced-pom.xml
 
+docgen/config/docgen.json
+
 .asciidoctor
 .project
 .classpath
