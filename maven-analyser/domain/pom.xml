@@ -25,19 +25,4 @@
       <artifactId>maven-core</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>org.limmen.analyser.Main</mainClass>
-          <arguments>
-            <argument>/home/ivo/projects/os/DocGen/pom.xml</argument>
-          </arguments>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>  
 </project>

@@ -21,7 +21,7 @@ public class Main implements Callable<Integer> {
   private Path file;
 
   @Option(names = { "-c",
-      "--companyName" }, required = true, description = "The company name to search the dependencies of")
+      "--companyName" }, required = true, description = "The company name to search the dependencies of (should be in the groupId)")
   private String companyName;
 
   @Option(names = { "-h", "--help", "-?", "-help" }, usageHelp = true, description = "Display this help and exit")
