@@ -20,6 +20,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.limmen.zenodotus.shared</groupId>
+      <artifactId>zenodotus-shared-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.asciidoctor</groupId>
       <artifactId>asciidoctorj</artifactId>
     </dependency>

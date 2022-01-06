@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.limmen.docgen.converter.AsciiDocConverterImpl;
+import org.limmen.docgen.converter.AsciiDocProjectOverviewGenerator;
 import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
+import org.limmen.docgen.domain.ProjectOverviewGenerator;
 import org.limmen.docgen.domain.SearchIndexGenerator;
 import org.limmen.docgen.indexer.IndexGeneratorImpl;
 import org.limmen.docgen.indexer.SearchIndexGeneratorImpl;
@@ -27,6 +29,8 @@ public class Main {
   private AsciiDocConverter asciiDocConverter;
   private Tokenizer tokenizer;
   private Config config;
+  private ProjectOverviewGenerator projectOverviewGenerator;
+
 
   private Main() throws IOException {
     String configDir = System.getenv("CONFIG_DIR");
@@ -46,6 +50,7 @@ public class Main {
     this.searchIndexGenerator = new SearchIndexGeneratorImpl(config, fileSystemHelper, tokenizer);
     this.indexGenerator = new IndexGeneratorImpl(config, fileSystemHelper, searchIndexGenerator);
     this.asciiDocConverter = new AsciiDocConverterImpl(config, fileSystemHelper, indexGenerator);
+    this.projectOverviewGenerator = new AsciiDocProjectOverviewGenerator(config);
 
     this.walkThroughFiles();
 
@@ -61,13 +66,16 @@ public class Main {
     Files.walkFileTree(config.getSourceDirectory(), fileFinderVisitor);
 
     List<Path> includedFiles = new ArrayList<>();
-    fileFinderVisitor.getFiles().forEach(file -> {
+    fileFinderVisitor.getAsciidocFiles().forEach(file -> {
       findIncludes(file).forEach(i -> {
         includedFiles.add(Path.of(file.getParent().toString(), i));
       });
     });
 
-    return fileFinderVisitor.getFiles().stream()
+    projectOverviewGenerator.generate(fileFinderVisitor.getProjectFiles());
+    convertFile(Path.of(config.getTargetDirectory().toString(), ProjectOverviewGenerator.PROJECT_OVERVIEW_FILENAME));
+
+    return fileFinderVisitor.getAsciidocFiles().stream()
         .filter(file -> !includedFiles.contains(file))
         .toList();
   }
@@ -92,7 +100,7 @@ public class Main {
         e.printStackTrace();
       }
       this.indexGenerator.addNewLink(targetFile);
-    }
+    } 
   }
 
   private List<String> findIncludes(Path file) {

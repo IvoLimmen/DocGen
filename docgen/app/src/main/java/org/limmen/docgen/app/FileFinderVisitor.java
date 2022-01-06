@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.limmen.docgen.domain.AsciiDocConverter;
+import org.limmen.docgen.domain.ProjectOverviewGenerator;
 
 public class FileFinderVisitor implements FileVisitor<Path> {
 
-  private List<Path> files = new ArrayList<>();
-  
+  private List<Path> asciidocFiles = new ArrayList<>();
+  private List<Path> projectFiles = new ArrayList<>();
+
   private AsciiDocConverter asciiDocConverter;
 
   public FileFinderVisitor(AsciiDocConverter asciiDocConverter) {
@@ -28,7 +30,9 @@ public class FileFinderVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     if (asciiDocConverter.canConvertFile(file)) {
-      this.files.add(file);
+      this.asciidocFiles.add(file);
+    } else if(ProjectOverviewGenerator.PROJECT_FILENAME.equals(file.getFileName().toString())) {
+      projectFiles.add(file);
     }
     return FileVisitResult.CONTINUE;
   }
@@ -43,7 +47,11 @@ public class FileFinderVisitor implements FileVisitor<Path> {
     return FileVisitResult.CONTINUE;
   }
 
-  public List<Path> getFiles() {
-    return files;
+  public List<Path> getAsciidocFiles() {
+    return asciidocFiles;
+  }
+
+  public List<Path> getProjectFiles() {
+    return projectFiles;
   }
 }
