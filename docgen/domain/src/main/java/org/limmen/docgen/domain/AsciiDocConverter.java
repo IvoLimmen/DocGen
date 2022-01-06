@@ -5,7 +5,7 @@ import java.nio.file.Path;
 
 public interface AsciiDocConverter {
   
-  boolean canConvertFile(String extention);
+  boolean canConvertFile(Path file);
   
   void convertToHtml(Path sourceFile, Path targetFile) throws IOException;
 

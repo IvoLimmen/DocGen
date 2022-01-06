@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.limmen.docgen.domain.AsciiDocConverter;
-import org.limmen.docgen.domain.FileSystemHelper;
 
 public class FileFinderVisitor implements FileVisitor<Path> {
 
@@ -17,10 +16,7 @@ public class FileFinderVisitor implements FileVisitor<Path> {
   
   private AsciiDocConverter asciiDocConverter;
 
-  private FileSystemHelper fileSystemHelper;
-
-  public FileFinderVisitor(FileSystemHelper fileSystemHelper, AsciiDocConverter asciiDocConverter) {
-    this.fileSystemHelper = fileSystemHelper;
+  public FileFinderVisitor(AsciiDocConverter asciiDocConverter) {
     this.asciiDocConverter = asciiDocConverter;
   }
 
@@ -31,8 +27,7 @@ public class FileFinderVisitor implements FileVisitor<Path> {
 
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-    String extention = this.fileSystemHelper.getExtention(file);
-    if (asciiDocConverter.canConvertFile(extention)) {
+    if (asciiDocConverter.canConvertFile(file)) {
       this.files.add(file);
     }
     return FileVisitResult.CONTINUE;

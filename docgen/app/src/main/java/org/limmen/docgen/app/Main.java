@@ -57,7 +57,7 @@ public class Main {
   }
 
   private List<Path> findFilesToConvert() throws IOException {
-    var fileFinderVisitor = new FileFinderVisitor(fileSystemHelper, this.asciiDocConverter);
+    var fileFinderVisitor = new FileFinderVisitor(this.asciiDocConverter);
     Files.walkFileTree(config.getSourceDirectory(), fileFinderVisitor);
 
     List<Path> includedFiles = new ArrayList<>();
@@ -83,8 +83,7 @@ public class Main {
   }
 
   private void convertFile(Path file) {
-    String extention = this.fileSystemHelper.getExtention(file);
-    if (asciiDocConverter.canConvertFile(extention)) {
+    if (asciiDocConverter.canConvertFile(file)) {
       Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
       try {
         Files.createDirectories(targetFile.getParent());

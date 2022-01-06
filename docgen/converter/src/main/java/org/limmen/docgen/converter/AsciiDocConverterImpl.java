@@ -39,6 +39,7 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
   private IndexGenerator indexGenerator;
 
   private final List<String> supportedFiles = List.of("json", "yml", "yaml", "adoc");
+  private final List<String> skippedFiles = List.of("team.json", "project.json");
 
   public AsciiDocConverterImpl(Config config, FileSystemHelper fileSystemHelper, IndexGenerator indexGenerator) {
     this.fileSystemHelper =fileSystemHelper;
@@ -78,8 +79,9 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
   }
 
   @Override
-  public boolean canConvertFile(String extention) {
-    return supportedFiles.contains(extention);
+  public boolean canConvertFile(Path file) {
+    String extention = this.fileSystemHelper.getExtention(file);
+    return supportedFiles.contains(extention) && !skippedFiles.contains(file.getFileName().toString());
   }
 
   @Override
