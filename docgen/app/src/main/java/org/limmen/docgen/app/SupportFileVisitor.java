@@ -19,7 +19,9 @@ public class SupportFileVisitor implements FileVisitor<Path> {
   
   private FileSystemHelper fileSystemHelper;
 
-  private final List<String> supportedSupportFiles = List.of("png", "apng", "jpg", "jpeg", "gif");
+  private final List<String> EXTENTIONS = List.of("png", "apng", "jpg", "jpeg", "gif");
+
+  private final List<String> FILENAMES = List.of("team.json", "project.json");
 
   public SupportFileVisitor(FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper = fileSystemHelper;
@@ -33,7 +35,7 @@ public class SupportFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (supportedSupportFiles.contains(extention)) {
+    if (EXTENTIONS.contains(extention) || FILENAMES.contains(file.getFileName().toString())) {
       log.info("Copy support file {} to target directory", file);
       Path targetFile = this.fileSystemHelper.toTargetPath(file);
       Files.createDirectories(targetFile.getParent());
