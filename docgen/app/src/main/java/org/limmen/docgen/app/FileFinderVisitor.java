@@ -32,7 +32,7 @@ public class FileFinderVisitor implements FileVisitor<Path> {
     if (asciiDocConverter.canConvertFile(file)) {
       this.asciidocFiles.add(file);
     } else if(ProjectOverviewGenerator.PROJECT_FILENAME.equals(file.getFileName().toString())) {
-      projectFiles.add(file);
+      this.projectFiles.add(file);
     }
     return FileVisitResult.CONTINUE;
   }
