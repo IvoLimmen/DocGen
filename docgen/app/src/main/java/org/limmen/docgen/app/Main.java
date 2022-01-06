@@ -40,7 +40,7 @@ public class Main {
 
     this.config = Json.load(Path.of(configDir, "docgen.json"));
     this.config.setTemplateDirectory(configDir);
-    
+
     this.fileSystemHelper = new FileSystemHelper(config);
     this.tokenizer = new Tokenizer();
     this.searchIndexGenerator = new SearchIndexGeneratorImpl(config, fileSystemHelper, tokenizer);
@@ -48,6 +48,8 @@ public class Main {
     this.asciiDocConverter = new AsciiDocConverterImpl(config, fileSystemHelper, indexGenerator);
 
     this.walkThroughFiles();
+
+    this.asciiDocConverter.close();
   }
 
   public static void main(String[] args) throws IOException {

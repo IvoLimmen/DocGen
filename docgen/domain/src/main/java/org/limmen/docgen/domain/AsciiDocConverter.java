@@ -8,4 +8,6 @@ public interface AsciiDocConverter {
   boolean canConvertFile(String extention);
   
   void convertToHtml(Path sourceFile, Path targetFile) throws IOException;
+
+  void close();
 }

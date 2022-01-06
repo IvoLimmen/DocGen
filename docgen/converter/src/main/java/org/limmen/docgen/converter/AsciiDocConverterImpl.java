@@ -150,4 +150,9 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
     asciidoctor.convertFile(sourceFile.toFile(), this.options);
     Files.move(this.fileSystemHelper.changeExtention(sourceFile, ".html"), targetFile, StandardCopyOption.REPLACE_EXISTING);
   }
+
+  @Override
+  public void close() {
+    asciidoctor.close();
+  }
 }
