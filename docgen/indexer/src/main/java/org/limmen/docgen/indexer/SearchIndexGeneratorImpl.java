@@ -12,10 +12,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.codec.language.Soundex;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.IndexItem;
-import org.limmen.docgen.domain.IndexLink;
-import org.limmen.docgen.domain.IndexNode;
-import org.limmen.docgen.domain.SearchIndexGenerator;
+import org.limmen.docgen.domain.index.IndexItem;
+import org.limmen.docgen.domain.index.IndexLink;
+import org.limmen.docgen.domain.index.IndexNode;
+import org.limmen.docgen.domain.index.SearchIndexGenerator;
 import org.limmen.docgen.model.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

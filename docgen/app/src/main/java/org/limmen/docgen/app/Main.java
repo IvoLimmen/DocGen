@@ -1,6 +1,7 @@
 package org.limmen.docgen.app;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -8,11 +9,14 @@ import java.util.Collections;
 import java.util.List;
 import org.limmen.docgen.converter.AsciiDocConverterImpl;
 import org.limmen.docgen.converter.AsciiDocProjectOverviewGenerator;
+import org.limmen.docgen.converter.SwaggerAsciiDocGeneratorImpl;
 import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
 import org.limmen.docgen.domain.ProjectOverviewGenerator;
-import org.limmen.docgen.domain.SearchIndexGenerator;
+import org.limmen.docgen.domain.SwaggerAsciiDocGenerator;
+import org.limmen.docgen.domain.file.RootFolder;
+import org.limmen.docgen.domain.index.SearchIndexGenerator;
 import org.limmen.docgen.indexer.IndexGeneratorImpl;
 import org.limmen.docgen.indexer.SearchIndexGeneratorImpl;
 import org.limmen.docgen.indexer.Tokenizer;
@@ -27,10 +31,10 @@ public class Main {
   private IndexGenerator indexGenerator;
   private SearchIndexGenerator searchIndexGenerator;
   private AsciiDocConverter asciiDocConverter;
+  private SwaggerAsciiDocGenerator swaggerAsciiDocGenerator;
   private Tokenizer tokenizer;
   private Config config;
   private ProjectOverviewGenerator projectOverviewGenerator;
-
 
   private Main() throws IOException {
     String configDir = System.getenv("CONFIG_DIR");
@@ -50,10 +54,16 @@ public class Main {
     this.searchIndexGenerator = new SearchIndexGeneratorImpl(config, fileSystemHelper, tokenizer);
     this.indexGenerator = new IndexGeneratorImpl(config, fileSystemHelper, searchIndexGenerator);
     this.asciiDocConverter = new AsciiDocConverterImpl(config, fileSystemHelper, indexGenerator);
+    this.swaggerAsciiDocGenerator = new SwaggerAsciiDocGeneratorImpl(fileSystemHelper);
     this.projectOverviewGenerator = new AsciiDocProjectOverviewGenerator(config);
 
-    this.walkThroughFiles();
+    var fileScanner = new FileScanner(config);
 
+    phaseGenerateFiles(fileScanner.getRootFolder());
+    phaseGenerateAsciiDoc(fileScanner.getRootFolder());
+    phaseCopySupportFiles();
+
+    this.indexGenerator.generate();
     this.asciiDocConverter.close();
   }
 
@@ -61,48 +71,54 @@ public class Main {
     new Main();
   }
 
-  private List<Path> findFilesToConvert() throws IOException {
-    var fileFinderVisitor = new FileFinderVisitor(this.asciiDocConverter);
-    Files.walkFileTree(config.getSourceDirectory(), fileFinderVisitor);
+  private void phaseGenerateFiles(RootFolder rootFolder) {
+    projectOverviewGenerator.generate(rootFolder.getProjectFiles());
+    var sourceFile = Path.of(config.getSourceDirectory().toString(),
+        ProjectOverviewGenerator.PROJECT_OVERVIEW_FILENAME);
+    rootFolder.getFiles().add(sourceFile);
+
+    rootFolder.getFilteredFiles(swaggerAsciiDocGenerator::canConvertFile)
+        .forEach(this::convertSwaggerToAsciiDoc);
+  }
+
+  private void phaseGenerateAsciiDoc(RootFolder rootFolder) {
 
     List<Path> includedFiles = new ArrayList<>();
-    fileFinderVisitor.getAsciidocFiles().forEach(file -> {
+    rootFolder.getAsciiDocFiles().forEach(file -> {
       findIncludes(file).forEach(i -> {
         includedFiles.add(Path.of(file.getParent().toString(), i));
       });
     });
 
-    projectOverviewGenerator.generate(fileFinderVisitor.getProjectFiles());
-    var sourceFile = Path.of(config.getSourceDirectory().toString(), ProjectOverviewGenerator.PROJECT_OVERVIEW_FILENAME);
-    convertFile(sourceFile);
-    Files.delete(sourceFile);
-    
-    return fileFinderVisitor.getAsciidocFiles().stream()
+    rootFolder.getAsciiDocFiles().stream()
         .filter(file -> !includedFiles.contains(file))
-        .toList();
+        .forEach(this::convertAsciiDocToHtml);
   }
 
-  private void walkThroughFiles() throws IOException {
+  private void phaseCopySupportFiles() throws IOException {
     var supportFileVisitor = new SupportFileVisitor(fileSystemHelper);
 
-    findFilesToConvert().forEach(this::convertFile);
-
     Files.walkFileTree(config.getSourceDirectory(), supportFileVisitor);
-
-    indexGenerator.generate();
   }
 
-  private void convertFile(Path file) {
-    if (asciiDocConverter.canConvertFile(file)) {
-      Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
-      try {
-        Files.createDirectories(targetFile.getParent());
-        asciiDocConverter.convertToHtml(file, targetFile);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      this.indexGenerator.addNewLink(targetFile);
-    } 
+  private void convertSwaggerToAsciiDoc(Path file) {
+    try {
+      var targetFile = this.fileSystemHelper.changeExtention(file, ".adoc");
+      swaggerAsciiDocGenerator.generate(file, targetFile);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  private void convertAsciiDocToHtml(Path file) {
+    Path targetFile = this.fileSystemHelper.changeExtention(this.fileSystemHelper.toTargetPath(file), ".html");
+    try {
+      Files.createDirectories(targetFile.getParent());
+      asciiDocConverter.convertToHtml(file, targetFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.indexGenerator.addNewLink(targetFile);
   }
 
   private List<String> findIncludes(Path file) {

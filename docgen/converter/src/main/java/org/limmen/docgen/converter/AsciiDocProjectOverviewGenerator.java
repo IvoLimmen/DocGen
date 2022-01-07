@@ -5,6 +5,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,7 +31,7 @@ public class AsciiDocProjectOverviewGenerator implements ProjectOverviewGenerato
    * @param files project JSON files
    */
   @Override
-  public void generate(List<Path> files) {
+  public void generate(Set<Path> files) {
     log.info("Generating project overview document...");
     var filename = Path.of(config.getSourceDirectory().toString(), PROJECT_OVERVIEW_FILENAME);
     var projects = files.stream().map(this::loadProject).toList();

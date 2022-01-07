@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.SearchIndexGenerator;
+import org.limmen.docgen.domain.index.SearchIndexGenerator;
 import org.limmen.docgen.model.Config;
 
 public class IndexerImplTest {

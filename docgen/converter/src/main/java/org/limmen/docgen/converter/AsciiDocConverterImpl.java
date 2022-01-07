@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ import org.limmen.docgen.converter.helper.Slf4jLogHandler;
 import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
-import org.limmen.docgen.domain.IndexNode;
+import org.limmen.docgen.domain.index.IndexNode;
 import org.limmen.docgen.model.Config;
 import org.limmen.docgen.model.value.TocValue;
 import org.limmen.docgen.model.value.ToggleValue;
@@ -37,9 +36,6 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
   private FileSystemHelper fileSystemHelper;
 
   private IndexGenerator indexGenerator;
-
-  private final List<String> supportedFiles = List.of("json", "yml", "yaml", "adoc");
-  private final List<String> skippedFiles = List.of("team.json", "project.json");
 
   public AsciiDocConverterImpl(Config config, FileSystemHelper fileSystemHelper, IndexGenerator indexGenerator) {
     this.fileSystemHelper =fileSystemHelper;
@@ -80,28 +76,15 @@ public class AsciiDocConverterImpl implements AsciiDocConverter {
 
   @Override
   public boolean canConvertFile(Path file) {
-    String extention = this.fileSystemHelper.getExtention(file);
-    return supportedFiles.contains(extention) && !skippedFiles.contains(file.getFileName().toString());
+    return this.fileSystemHelper.getExtention(file).equals("adoc");
   }
 
   @Override
   public void convertToHtml(Path sourceFile, Path targetFile) throws IOException {
-    if (sourceFile.toString().endsWith("json") || sourceFile.toString().endsWith("yml") || sourceFile.toString().endsWith("yaml")) {      
-      convertSwagger3FileToAsciiDoc(sourceFile, targetFile.getParent());
-      var targetAdoc = this.fileSystemHelper.changeExtention(targetFile, ".adoc");
-      analyzerAsciiDocForSearchIndex(targetAdoc, targetAdoc);
-      convertAsciiDocToHtml(targetAdoc, targetFile);
-    }
     if (sourceFile.toString().endsWith("adoc")) {
       analyzerAsciiDocForSearchIndex(sourceFile, targetFile);
       convertAsciiDocToHtml(sourceFile, targetFile);
     }
-  }
-
-  private void convertSwagger3FileToAsciiDoc(Path sourceFile, Path targetPath) throws IOException {
-    log.info("Convert {} to AsciiDoc (assuming Swagger file)", sourceFile);
-    AsciiDocGenerator generator = new AsciiDocGenerator();    
-    generator.generate(sourceFile, targetPath);
   }
 
   private void analyzerAsciiDocForSearchIndex(Path sourceFile, Path targetFile) throws IOException {

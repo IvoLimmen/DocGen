@@ -11,7 +11,7 @@ import java.util.TreeSet;
 
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
-import org.limmen.docgen.domain.SearchIndexGenerator;
+import org.limmen.docgen.domain.index.SearchIndexGenerator;
 import org.limmen.docgen.model.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

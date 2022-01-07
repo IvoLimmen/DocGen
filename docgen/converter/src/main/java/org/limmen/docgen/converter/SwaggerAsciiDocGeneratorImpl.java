@@ -11,6 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.limmen.docgen.converter.asciidoc.AsciiDoc;
 import org.limmen.docgen.converter.asciidoc.TableCellModifier;
+import org.limmen.docgen.domain.FileSystemHelper;
+import org.limmen.docgen.domain.SwaggerAsciiDocGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.core.util.Yaml;
@@ -26,15 +30,30 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 
-public class AsciiDocGenerator {
+public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
 
+  private final static Logger log = LoggerFactory.getLogger(SwaggerAsciiDocGeneratorImpl.class);
+  
   private AsciiDoc adoc;
 
-  public AsciiDocGenerator() {
+  private FileSystemHelper fileSystemHelper;
+
+  private final List<String> supportedFiles = List.of("json", "yml", "yaml");
+
+  private final List<String> skippedFiles = List.of("team.json", "project.json");
+
+  public SwaggerAsciiDocGeneratorImpl(FileSystemHelper fileSystemHelper) {
+    this.fileSystemHelper = fileSystemHelper;
+  }
+
+  @Override
+  public boolean canConvertFile(Path file) {
+    String extention = this.fileSystemHelper.getExtention(file);
+    return supportedFiles.contains(extention) && !skippedFiles.contains(file.getFileName().toString());
   }
 
   public void generate(Path inputFile, Path outputDir) throws IOException {
-
+    log.info("Converting {} to AsciiDoc file...", inputFile.getFileName());
     var fileName = inputFile.getFileName().toString();
     fileName = fileName.substring(0, fileName.indexOf("."));
     var outputFile = Path.of(outputDir.toString(), fileName + ".adoc");

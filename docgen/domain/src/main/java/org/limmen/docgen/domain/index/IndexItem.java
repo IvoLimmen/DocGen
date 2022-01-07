@@ -1,4 +1,4 @@
-package org.limmen.docgen.domain;
+package org.limmen.docgen.domain.index;
 
 import java.util.HashSet;
 import java.util.Objects;

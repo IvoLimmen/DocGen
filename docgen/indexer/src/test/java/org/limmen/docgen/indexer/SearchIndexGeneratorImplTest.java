@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.limmen.docgen.domain.FileSystemHelper;
-import org.limmen.docgen.domain.IndexNode;
+import org.limmen.docgen.domain.index.IndexNode;
 import org.limmen.docgen.model.Config;
 import org.limmen.docgen.model.IndexGenerator;
 import org.mockito.junit.jupiter.MockitoExtension;
