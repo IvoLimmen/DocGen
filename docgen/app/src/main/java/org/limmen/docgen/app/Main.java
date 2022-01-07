@@ -73,8 +73,10 @@ public class Main {
     });
 
     projectOverviewGenerator.generate(fileFinderVisitor.getProjectFiles());
-    convertFile(Path.of(config.getTargetDirectory().toString(), ProjectOverviewGenerator.PROJECT_OVERVIEW_FILENAME));
-
+    var sourceFile = Path.of(config.getSourceDirectory().toString(), ProjectOverviewGenerator.PROJECT_OVERVIEW_FILENAME);
+    convertFile(sourceFile);
+    Files.delete(sourceFile);
+    
     return fileFinderVisitor.getAsciidocFiles().stream()
         .filter(file -> !includedFiles.contains(file))
         .toList();

@@ -32,7 +32,7 @@ public class AsciiDocProjectOverviewGenerator implements ProjectOverviewGenerato
   @Override
   public void generate(List<Path> files) {
     log.info("Generating project overview document...");
-    var filename = Path.of(config.getTargetDirectory().toString(), PROJECT_OVERVIEW_FILENAME);
+    var filename = Path.of(config.getSourceDirectory().toString(), PROJECT_OVERVIEW_FILENAME);
     var projects = files.stream().map(this::loadProject).toList();
     try {
       Files.writeString(filename, createDocument(projects));
@@ -46,7 +46,9 @@ public class AsciiDocProjectOverviewGenerator implements ProjectOverviewGenerato
     var document = """
         # Project overview documentation
 
-        This document is generated and contains all project dependencies as found.
+        ## Architecture overview
+
+        The following diagram is generated based on found dependencies focused on internal groupId's.
 
         """;
 
