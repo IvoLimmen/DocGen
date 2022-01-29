@@ -7,8 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
 
+import org.limmen.docgen.domain.Constants;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,6 @@ public class SupportFileVisitor implements FileVisitor<Path> {
   private final static Logger log = LoggerFactory.getLogger(SupportFileVisitor.class);
   
   private FileSystemHelper fileSystemHelper;
-
-  private final List<String> EXTENTIONS = List.of("png", "apng", "jpg", "jpeg", "gif");
-
-  private final List<String> FILENAMES = List.of("team.json", "project.json");
 
   public SupportFileVisitor(FileSystemHelper fileSystemHelper) {
     this.fileSystemHelper = fileSystemHelper;
@@ -35,7 +31,7 @@ public class SupportFileVisitor implements FileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
     String extention = this.fileSystemHelper.getExtention(file);
-    if (EXTENTIONS.contains(extention) || FILENAMES.contains(file.getFileName().toString())) {
+    if (Constants.SUPPORTED_EXTENTIONS.contains(extention) || Constants.SPECIAL_FILENAMES.contains(file.getFileName().toString())) {
       log.info("Copy support file {} to target directory", file);
       Path targetFile = this.fileSystemHelper.toTargetPath(file);
       Files.createDirectories(targetFile.getParent());
