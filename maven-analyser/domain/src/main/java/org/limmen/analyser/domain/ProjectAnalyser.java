@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.limmen.zenodotus.project.model.Dependency;
@@ -32,7 +33,6 @@ public class ProjectAnalyser {
         if (model.getDependencyManagement() != null) {
           List<Dependency> newDependencies = new ArrayList<>();
           var dependencies = model.getDependencyManagement().getDependencies();
-          var properties = model.getProperties();
 
           dependencies.stream()
               .filter(dep -> dep.getGroupId().contains(companyName))
@@ -41,7 +41,7 @@ public class ProjectAnalyser {
                 Dependency dependency = new Dependency();
                 dependency.setGroupId(dep.getGroupId());
                 dependency.setArtifactId(dep.getArtifactId());
-                dependency.setVersion(resolveProperties(dep.getVersion(), properties));
+                dependency.setVersion(resolveProperties(dep.getVersion(), model));
                 newDependencies.add(dependency);
               });
           builder.dependencies(newDependencies);
@@ -57,12 +57,16 @@ public class ProjectAnalyser {
     return builder.build();
   }
 
-  private String resolveProperties(String version, Properties properties) {
+  private String resolveProperties(String version, Model model) {
     if (version.contains("${")) {
       var index = version.indexOf("${");
       var ref = version.substring(index + 2, version.indexOf("}"));
 
-      return properties.get(ref).toString();
+      if("project.version".equals(ref)) {
+        return model.getVersion();
+      } else {
+        return model.getProperties().get(ref).toString();
+      }
     } else {
       return version;
     }
