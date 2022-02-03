@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
+import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.limmen.zenodotus.project.model.Dependency;
@@ -29,23 +29,19 @@ public class ProjectAnalyser {
         builder.description(model.getDescription());
         builder.name(model.getName());
 
+        List<Dependency> newDependencies = new ArrayList<>();
         if (model.getDependencyManagement() != null) {
-          List<Dependency> newDependencies = new ArrayList<>();
           var dependencies = model.getDependencyManagement().getDependencies();
-          var properties = model.getProperties();
 
-          dependencies.stream()
-              .filter(dep -> dep.getGroupId().contains(companyName))
-              .forEach(dep -> {
-
-                Dependency dependency = new Dependency();
-                dependency.setGroupId(dep.getGroupId());
-                dependency.setArtifactId(dep.getArtifactId());
-                dependency.setVersion(resolveProperties(dep.getVersion(), properties));
-                newDependencies.add(dependency);
-              });
-          builder.dependencies(newDependencies);
+          analyseDependencies(companyName, model, newDependencies, dependencies);
         }
+        if(model.getDependencies() != null) {
+          var dependencies = model.getDependencies();
+
+          analyseDependencies(companyName, model, newDependencies, dependencies);
+
+        }
+        builder.dependencies(newDependencies);
 
       } catch (XmlPullParserException e) {
         // xml issue
@@ -57,12 +53,32 @@ public class ProjectAnalyser {
     return builder.build();
   }
 
-  private String resolveProperties(String version, Properties properties) {
+  private void analyseDependencies(String companyName, Model model, List<Dependency> newDependencies,
+      List<org.apache.maven.model.Dependency> dependencies) {
+    dependencies.stream()
+        .filter(dep -> dep.getGroupId().contains(companyName))
+        .forEach(dep -> {
+
+          Dependency dependency = new Dependency();
+          dependency.setGroupId(dep.getGroupId());
+          dependency.setArtifactId(dep.getArtifactId());
+          if(dep.getVersion() != null) {
+            dependency.setVersion(resolveProperties(dep.getVersion(), model));
+          }
+          newDependencies.add(dependency);
+        });
+  }
+
+  private String resolveProperties(String version, Model model) {
     if (version.contains("${")) {
       var index = version.indexOf("${");
       var ref = version.substring(index + 2, version.indexOf("}"));
 
-      return properties.get(ref).toString();
+      if("project.version".equals(ref)) {
+        return model.getVersion();
+      } else {
+        return model.getProperties().get(ref).toString();
+      }
     } else {
       return version;
     }

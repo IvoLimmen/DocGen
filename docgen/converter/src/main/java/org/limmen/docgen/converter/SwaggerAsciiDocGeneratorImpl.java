@@ -138,29 +138,32 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
       adoc.par(schema.getDescription());
     }
 
-    adoc.section4("Properties");
-    adoc.tableHeader("1,1,1,2,2", "|Name|Type|Format|Description|Example");
-    schema.getProperties().entrySet().forEach(entry -> {
-      adoc.tableCell(entry.getKey());
-      var value = entry.getValue();
-      adoc.tableCell(value.getType());
-      adoc.tableCell(value.getFormat() == null ? "" : value.getFormat());
-      StringBuilder desc = new StringBuilder();
-      if (value.getDescription() != null) {
-        desc.append(value.getDescription());
-      }
-      if (value.getDefault() != null) {
-        if (desc.length() > 0) {
-          desc.append("\n");
+    var properties  = schema.getProperties();
+    if (properties != null) {
+      adoc.section4("Properties");
+      adoc.tableHeader("1,1,1,2,2", "|Name|Type|Format|Description|Example");
+      properties.entrySet().forEach(entry -> {
+        adoc.tableCell(entry.getKey());
+        var value = entry.getValue();
+        adoc.tableCell(value.getType());
+        adoc.tableCell(value.getFormat() == null ? "" : value.getFormat());
+        StringBuilder desc = new StringBuilder();
+        if (value.getDescription() != null) {
+          desc.append(value.getDescription());
         }
-        desc.append("Default: ");
-        desc.append(value.getDefault());
-      }
-      adoc.tableCell(desc.toString());
-      adoc.tableCell(value.getExample() == null ? "" : value.getExample().toString());
-      adoc.tableEndRow();
-    });
-    adoc.tableEnd();
+        if (value.getDefault() != null) {
+          if (desc.length() > 0) {
+            desc.append("\n");
+          }
+          desc.append("Default: ");
+          desc.append(value.getDefault());
+        }
+        adoc.tableCell(desc.toString());
+        adoc.tableCell(value.getExample() == null ? "" : value.getExample().toString());
+        adoc.tableEndRow();
+      });
+      adoc.tableEnd();
+    }
   }
 
   private void handlePath(String key, PathItem pathItem) {
