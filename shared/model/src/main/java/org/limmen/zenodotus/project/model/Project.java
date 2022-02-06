@@ -2,6 +2,7 @@ package org.limmen.zenodotus.project.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -148,5 +149,18 @@ public class Project {
 
   public List<Dependency> getDependencies() {
     return dependencies;
+  }
+
+  public boolean hasDependencyOn(String groupId, String artifactId) {
+    return this.dependencies.stream().anyMatch(dep -> 
+      groupId.equalsIgnoreCase(dep.getGroupId()) 
+      && artifactId.equalsIgnoreCase(dep.getArtifactId()));
+  }
+
+  public Optional<String> getDependencyVersion(String groupId, String artifactId) {
+    return this.dependencies.stream()
+        .filter(dep -> groupId.equalsIgnoreCase(dep.getGroupId()) && artifactId.equalsIgnoreCase(dep.getArtifactId()))
+        .findFirst()
+        .map(Dependency::getVersion);
   }
 }
