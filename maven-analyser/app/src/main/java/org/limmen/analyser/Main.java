@@ -1,12 +1,16 @@
 package org.limmen.analyser;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.limmen.analyser.domain.ProjectAnalyser;
 import org.limmen.zenodotus.project.model.Project;
 import org.limmen.zenodotus.project.model.helper.Json;
@@ -37,15 +41,26 @@ public class Main implements Callable<Integer> {
     }
 
     var project = loadProjectFile(Path.of(file.toString(), "project.json"));
+    var pomFile = loadPomFile(Path.of(file.toString(), "pom.xml"));
 
     var updatedProject = projectAnalyser.analyse(
-        Path.of(file.toString(), "pom.xml"),
+        pomFile,
         project,
         companyName);
 
     saveProject(updatedProject);
 
     return 0;
+  }
+
+  private Model loadPomFile(Path pomFile) {
+    try {
+      MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
+      var reader = new FileReader(pomFile.toFile());
+      return xpp3Reader.read(reader);
+    } catch (XmlPullParserException | IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private Project loadProjectFile(Path projectfile) throws IOException {
