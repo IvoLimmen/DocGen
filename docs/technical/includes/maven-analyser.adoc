@@ -1,0 +1,7 @@
+## Maven-Analyser
+
+Simply gets all the dependencies from a `pom.xml` by looking at the `DependencyManagement` group.
+If you use maven correctly you should have all the dependencies listed there with the version that is used.
+The tool does check and resolve properties if your version is a property.
+
+The tool writes a JSON from the analysed data for the DocGen application to use and generate an overview of connected applications.

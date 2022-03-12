@@ -1,0 +1,48 @@
+## Swagger
+
+When scanning for Swagger documents the software will look for any JSON and YML file and assume it is a Swagger file to convert.
+
+### What does the JSON/YML Swagger to AsciiDoc converter, convert?
+
+The following models from OpenAPI are being converted to AsciiDoc:
+
+* Info
+** Title
+** Description
+** Version
+** Contact information
+  
+* Paths (sorted!)
+** Per path the operations if they are present in the following order:
+*** delete
+*** get
+*** head
+*** options
+*** patch
+*** post
+*** put
+*** trace
+* Per operation:
+** the current path
+** the call (method and path)
+** If the method is deprecated (warning)
+** Description
+** Summary
+** RequestBody
+*** Description
+*** If the body is required
+*** Shows object references per media type
+** Parameters
+*** Lists type, name, description, schema and default
+*** Also adds examples in the default column
+** Responses
+*** Shows object references per media type
+*** Currently does not list anonymous types
+
+The following stuff is not (yet?) handled:
+
+  * External examples
+  * Headers
+  * Security
+  * Servers
+  * Tags

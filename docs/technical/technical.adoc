@@ -1,0 +1,25 @@
+= Technical documentation
+Ivo Limmen <ivo@limmen.org>
+v0.1, 2022-03-12: Initial document
+:page-layout: docs
+:description: Description, architecture and technical details of Zenodotus
+:tags: Architecture, Design, Technical, Documentation
+:source-highlighter: coderay
+:includesdir: includes
+:imagesdir: images
+:icons: font
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:plus: icon:check-square[role="green"]
+:minus: icon:minus-square[role="red"]
+:equal: icon:square-o[]
+:sectnums:
+
+include::{includesdir}/overview.adoc[]
+
+include::{includesdir}/docgen.adoc[]
+
+include::{includesdir}/swagger.adoc[]
+
+include::{includesdir}/maven-analyser.adoc[]
