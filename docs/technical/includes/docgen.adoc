@@ -1,5 +1,31 @@
 ## DocGen
 
+### Phases
+
+The DocGen application runs using the following steps:
+
+1. Scan the directory structure.
++
+This makes a list of Teams with lists of Projects within.
+
+2. Generate files.
++
+In this phase we generate files (in AsciiDoc). Currently that includes:
++
+* Project overview documentation
+
+3. Convert documents to AsciiDoc.
++
+In this phase we rack up all the AsciiDoc files and convert them to HTML. This will also create extra support files like CSS, javascript and images.
+
+4. Generate index files.
++
+We generate the index files needed for searching across the entire site.
+
+5. Copy support files.
++
+This will copy all generated support files to the target directory. This also includes the index files.
+
 ### Configuration file
 
 The configuration file has the following properties.

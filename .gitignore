@@ -1,5 +1,7 @@
 dependency-reduced-pom.xml
+
 docs/technical/images/
+docs/technical/*.pdf
 
 docgen/config/docgen.json
 
