@@ -22,4 +22,4 @@ This does require some requirements:
 
 ## Read more
 
-[Technical design](docs/technical.adoc)
+[Technical design](docs/technical/technical.adoc)
