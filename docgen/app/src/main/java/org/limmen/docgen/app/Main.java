@@ -7,13 +7,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.limmen.docgen.AsciiDocGenerator;
 import org.limmen.docgen.converter.AsciiDocConverterImpl;
 import org.limmen.docgen.converter.AsciiDocProjectOverviewGenerator;
 import org.limmen.docgen.converter.SwaggerAsciiDocGeneratorImpl;
 import org.limmen.docgen.domain.AsciiDocConverter;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.IndexGenerator;
-import org.limmen.docgen.domain.ProjectOverviewGenerator;
 import org.limmen.docgen.domain.SwaggerAsciiDocGenerator;
 import org.limmen.docgen.domain.file.RootFolder;
 import org.limmen.docgen.domain.index.SearchIndexGenerator;
@@ -34,7 +35,7 @@ public class Main {
   private SwaggerAsciiDocGenerator swaggerAsciiDocGenerator;
   private Tokenizer tokenizer;
   private Config config;
-  private ProjectOverviewGenerator projectOverviewGenerator;
+  private AsciiDocGenerator projectOverviewGenerator;
 
   private Main() throws IOException {
     String configDir = System.getenv("CONFIG_DIR");
@@ -55,7 +56,10 @@ public class Main {
     this.indexGenerator = new IndexGeneratorImpl(config, fileSystemHelper, searchIndexGenerator);
     this.asciiDocConverter = new AsciiDocConverterImpl(config, fileSystemHelper, indexGenerator);
     this.swaggerAsciiDocGenerator = new SwaggerAsciiDocGeneratorImpl(fileSystemHelper);
-    this.projectOverviewGenerator = new AsciiDocProjectOverviewGenerator(config);
+
+    // plugins
+    this.projectOverviewGenerator = new AsciiDocProjectOverviewGenerator();
+    this.projectOverviewGenerator.initialise(config);
 
     var fileScanner = new FileScanner(config);
 
@@ -72,10 +76,7 @@ public class Main {
   }
 
   private void phaseGenerateFiles(RootFolder rootFolder) {
-    projectOverviewGenerator.generate(rootFolder.getProjectFiles());
-    var sourceFile = Path.of(config.getSourceDirectory().toString(),
-        ProjectOverviewGenerator.PROJECT_OVERVIEW_FILENAME);
-    rootFolder.getFiles().add(sourceFile);
+    projectOverviewGenerator.generate(rootFolder);
 
     rootFolder.getFilteredFiles(swaggerAsciiDocGenerator::canConvertFile)
         .forEach(this::convertSwaggerToAsciiDoc);

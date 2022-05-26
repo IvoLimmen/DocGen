@@ -1,3 +1,6 @@
+output/
+data/
+
 dependency-reduced-pom.xml
 
 docs/technical/images/

@@ -11,30 +11,49 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.limmen.docgen.AsciiDocGenerator;
 import org.limmen.docgen.converter.asciidoc.AsciiDoc;
-import org.limmen.docgen.domain.ProjectOverviewGenerator;
+import org.limmen.docgen.domain.file.RootFolder;
 import org.limmen.docgen.model.Config;
 import org.limmen.zenodotus.project.model.Project;
 import org.limmen.zenodotus.project.model.helper.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AsciiDocProjectOverviewGenerator implements ProjectOverviewGenerator {
+public class AsciiDocProjectOverviewGenerator implements AsciiDocGenerator {
 
   private final static Logger log = LoggerFactory.getLogger(AsciiDocProjectOverviewGenerator.class);
   
-  private final Config config;
+  private Config config;
 
-  public AsciiDocProjectOverviewGenerator(Config config) {
+  private RootFolder rootFolder;
+
+  private String PROJECT_DEPENDENCIES_FILENAME = "dependencies.adoc";
+
+  private String PROJECT_OVERVIEW_FILENAME = "project";
+
+  public AsciiDocProjectOverviewGenerator() {
+  }
+
+  @Override
+  public void initialise(Config config) {
     this.config = config;
   }
 
+  @Override
+  public void generate(RootFolder rootFolder) {
+    this.rootFolder = rootFolder;
+    generate(rootFolder.getFilteredFiles(file -> file.getFileName().toString().equals(PROJECT_OVERVIEW_FILENAME + ".json")));
+  }
+
+  private void createdFile(String fileName) {
+    rootFolder.getFiles().add(Path.of(config.getSourceDirectory().toString(), fileName));
+  }
+
   /**
-   * 
    * @param files project JSON files
    */
-  @Override
-  public void generate(Set<Path> files) {
+  private void generate(Set<Path> files) {
     var projects = files.stream()
         .map(this::loadProject)
         .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
@@ -52,12 +71,13 @@ public class AsciiDocProjectOverviewGenerator implements ProjectOverviewGenerato
 
   private void generateOverviewDocument(Map<Path, Project> files) {
     log.info("Generating project overview document...");
-    var filename = Path.of(config.getSourceDirectory().toString(), PROJECT_OVERVIEW_FILENAME);
+    var filename = Path.of(config.getSourceDirectory().toString(), PROJECT_OVERVIEW_FILENAME + ".adoc");
     try {
       Files.writeString(filename, createProjectOverviewDocument(files.values()));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+    createdFile(PROJECT_OVERVIEW_FILENAME + ".adoc");
   }
 
   private void createProjectDependenciesDocument(Path file, Project project, Collection<Project> others) {
@@ -92,10 +112,10 @@ public class AsciiDocProjectOverviewGenerator implements ProjectOverviewGenerato
         });
         adoc.tableEnd();
       }
-
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+    createdFile(PROJECT_DEPENDENCIES_FILENAME);
   } 
 
   private String createProjectOverviewDocument(Collection<Project> projects) {
