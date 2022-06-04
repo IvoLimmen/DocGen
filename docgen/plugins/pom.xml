@@ -9,19 +9,13 @@
     <version>0.0.1-SNAPSHOT</version>  
   </parent>
 
-  <groupId>org.limmen.docgen</groupId>
-  <artifactId>docgen-project</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <groupId>org.limmen.docgen.plugins</groupId>
+  <artifactId>docgen-plugins-project</artifactId>
   <packaging>pom</packaging>
-  <name>DocGen - Project</name>
+  <name>DocGen - Plugins - Project</name>
 
   <modules>
-    <module>app</module>
-    <module>model</module>
-    <module>converter</module>
-    <module>domain</module>
-    <module>indexer</module>
-    <module>plugins</module>
-    <module>util</module>
+    <module>api</module>
+    <module>projectoverview</module>
   </modules>
 </project>

@@ -9,8 +9,8 @@ import java.util.TreeSet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.limmen.docgen.converter.asciidoc.AsciiDoc;
-import org.limmen.docgen.converter.asciidoc.TableCellModifier;
+import org.limmen.docgen.asciidoc.AsciiDoc;
+import org.limmen.docgen.asciidoc.TableCellModifier;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.SwaggerAsciiDocGenerator;
 import org.slf4j.Logger;

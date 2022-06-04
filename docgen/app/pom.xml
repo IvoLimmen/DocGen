@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>docgen-model</artifactId>
+      <artifactId>docgen-domain</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -29,6 +29,18 @@
       <artifactId>docgen-indexer</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.limmen.docgen.plugins</groupId>
+      <artifactId>docgen-plugins-projectoverview</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.fusesource.jansi</groupId>
+      <artifactId>jansi</artifactId>
+      <scope>runtime</scope>
+    </dependency>    
   </dependencies>
 
   <build>

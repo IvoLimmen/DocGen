@@ -1,4 +1,4 @@
-package org.limmen.docgen.converter;
+package org.limmen.docgen.plugin.projectoverview;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -11,10 +11,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.limmen.docgen.AsciiDocGenerator;
-import org.limmen.docgen.converter.asciidoc.AsciiDoc;
+import org.limmen.docgen.asciidoc.AsciiDoc;
 import org.limmen.docgen.domain.file.RootFolder;
 import org.limmen.docgen.model.Config;
+import org.limmen.docgen.plugins.api.AsciiDocGenerator;
 import org.limmen.zenodotus.project.model.Project;
 import org.limmen.zenodotus.project.model.helper.Json;
 import org.slf4j.Logger;
@@ -176,5 +176,9 @@ public class AsciiDocProjectOverviewGenerator implements AsciiDocGenerator {
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+  }
+
+  @Override
+  public void close() throws Exception {
   }
 }

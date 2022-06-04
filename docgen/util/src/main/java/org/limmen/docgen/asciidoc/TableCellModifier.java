@@ -1,4 +1,4 @@
-package org.limmen.docgen.converter.asciidoc;
+package org.limmen.docgen.asciidoc;
 
 public enum TableCellModifier {
   
