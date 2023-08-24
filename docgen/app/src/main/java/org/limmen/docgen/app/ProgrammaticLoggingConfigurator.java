@@ -15,7 +15,7 @@ import ch.qos.logback.core.spi.ContextAwareBase;
 public class ProgrammaticLoggingConfigurator extends ContextAwareBase implements Configurator {
   
   @Override
-  public void configure(LoggerContext loggerContext) {
+  public ExecutionStatus configure(LoggerContext loggerContext) {
     addInfo("Setting up default configuration.");
 
     PatternLayout pattern = new PatternLayout();
@@ -39,5 +39,7 @@ public class ProgrammaticLoggingConfigurator extends ContextAwareBase implements
     log.setAdditive(false);
     log.setLevel(Level.DEBUG);
     log.addAppender(consoleAppender);
+
+    return ExecutionStatus.NEUTRAL;
   }
 }

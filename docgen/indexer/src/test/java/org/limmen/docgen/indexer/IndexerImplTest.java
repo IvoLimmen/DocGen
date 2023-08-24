@@ -72,10 +72,12 @@ public class IndexerImplTest {
 
     var directories = subject.getFoldersIndex(1);
 
-    assertEquals(2, directories.size());
+    assertEquals(3, directories.size());
 
-    assertEquals("Product1", directories.get(0));
+    assertEquals("", directories.get(0));
 
-    assertEquals("Product2", directories.get(1));
+    assertEquals("Product1", directories.get(1));
+
+    assertEquals("Product2", directories.get(2));
   }  
 }

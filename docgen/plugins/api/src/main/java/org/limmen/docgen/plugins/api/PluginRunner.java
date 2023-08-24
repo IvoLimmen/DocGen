@@ -37,8 +37,7 @@ public class PluginRunner implements AutoCloseable {
       try {
         gen.close();
       } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     });
   }

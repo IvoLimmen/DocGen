@@ -103,4 +103,5 @@ public class SearchIndexGeneratorImplTest {
     this.config.setSourceDirectory("/home/build/target/");
     this.config.setIndexGenerator(new IndexGenerator());
     this.config.getIndexGenerator().setIncludeSearch(true);
-  }}
+  }
+}
