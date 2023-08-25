@@ -5,12 +5,14 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.limmen.docgen.asciidoc.AsciiDoc;
+import org.limmen.docgen.asciidoc.MarkdownConverter;
 import org.limmen.docgen.asciidoc.TableCellModifier;
 import org.limmen.docgen.domain.FileSystemHelper;
 import org.limmen.docgen.domain.SwaggerAsciiDocGenerator;
@@ -54,12 +56,11 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
     return supportedFiles.contains(extention) && !skippedFiles.contains(file.getFileName().toString());
   }
 
-  public void generate(Path inputFile, Path outputDir) throws IOException {
+  public void generate(Path inputFile, Path outputFile) throws IOException {
     log.info("Converting {} to AsciiDoc file...", inputFile.getFileName());
+    Files.createDirectories(outputFile.getParent());
     var fileName = inputFile.getFileName().toString();
     fileName = fileName.substring(0, fileName.indexOf("."));
-    var outputFile = Path.of(outputDir.toString(), fileName + ".adoc");
-    Files.createDirectories(outputDir);
 
     ObjectMapper objectMapper;
     if (inputFile.toString().endsWith(".yml") || inputFile.toString().endsWith(".yaml")) {
@@ -100,7 +101,7 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
   private void handleInfo(Info info) {
     adoc.section1(info.getTitle());
     if (info.getDescription() != null && info.getDescription().length() > 0) {
-      adoc.par(info.getDescription());
+      adoc.par(MarkdownConverter.convertLinks(info.getDescription()));
     }
     adoc.par("Version " + info.getVersion());
     if (info.getTermsOfService() != null && info.getTermsOfService().length() > 0) {
@@ -334,7 +335,7 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
     adoc.section4("Parameters");
 
     adoc.tableHeader("1,2,3,1,1", "|Type|Name|Description|Schema|Default");
-    parameters.forEach(parameter -> {
+    parameters.stream().filter(Objects::nonNull).forEach(parameter -> {
       adoc.tableCell(parameter.getIn());
       adoc.tableCell(parameter.getName());
 

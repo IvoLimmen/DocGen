@@ -9,6 +9,10 @@ public class AsciiDoc {
     return "<<" + link + ">>";
   }
 
+  public static String linkMacro(String link, String text) {
+    return String.format("link:%s[%s]", link, text);
+  }
+
   public static String monospaced(String text) {
     return "`" + text + "`";
   }

@@ -50,3 +50,5 @@ The following stuff is not (yet?) handled:
   * Headers
   * Servers
   * Tags
+
+Note: When reading the description of the swagger file it will also convert the markdown links and convert them to asciidoc macro links.
