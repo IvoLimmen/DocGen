@@ -64,7 +64,7 @@ Create a copy of the `docgen.json.template` file and call it `docgen.json` in th
 .Running the application from the command line
 [source,bash]
 ----
-CONFIG_DIR=[path-to-docgen]/config mvnci -pl org.limmen.docgen:docgen-app
+CONFIG_DIR=[path-to-docgen]/config mvn exec:java -pl org.limmen.docgen:docgen-app
 ----
 
 ### Testing the generated site
