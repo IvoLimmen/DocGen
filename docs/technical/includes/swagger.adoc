@@ -38,11 +38,15 @@ The following models from OpenAPI are being converted to AsciiDoc:
 ** Responses
 *** Shows object references per media type
 *** Currently does not list anonymous types
+** Security
+
+* Securityschemes
+
+* Security if it is globally defined
 
 The following stuff is not (yet?) handled:
 
   * External examples
   * Headers
-  * Security
   * Servers
   * Tags

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,11 +30,12 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 
 public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
 
   private final static Logger log = LoggerFactory.getLogger(SwaggerAsciiDocGeneratorImpl.class);
-  
+
   private AsciiDoc adoc;
 
   private FileSystemHelper fileSystemHelper;
@@ -65,7 +67,7 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
     } else {
       objectMapper = Json.mapper();
     }
-    
+
     var openApi = objectMapper.readValue(inputFile.toFile(), OpenAPI.class);
 
     try (var printStream = new PrintStream(outputFile.toFile())) {
@@ -75,6 +77,23 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
       handleInfo(openApi.getInfo());
       handlePathsSorted(openApi);
       handleComponentSorted(openApi.getComponents());
+      handleGlobalSecurity(openApi.getSecurity());
+    }
+  }
+
+  private void handleGlobalSecurity(List<SecurityRequirement> securityRequirement) {
+    if (securityRequirement == null) {
+      return;
+    }
+
+    adoc.section2("Security");
+    for (SecurityRequirement sr : securityRequirement) {
+      for (var x : sr.entrySet()) {
+        adoc.par(x.getKey());
+        x.getValue().forEach(q -> {
+          adoc.par(q);
+        });
+      }
     }
   }
 
@@ -124,6 +143,24 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
     sortedSchemas.forEach(key -> {
       handleModel(key, components.getSchemas().get(key));
     });
+
+    var securitySchemes = components.getSecuritySchemes();
+
+    if (securitySchemes != null) {
+      adoc.section2("Securityschemes");
+
+      securitySchemes.keySet().stream().sorted().forEach(key -> {
+        var securityScheme = securitySchemes.get(key);
+        adoc.tableHeader("1,1,1,1,2", "|Name||Scheme|Bearer format|OpenId URL|Description");        
+        adoc.tableCell(key);
+        adoc.tableCell(securityScheme.getScheme());
+        adoc.tableCell(securityScheme.getBearerFormat());
+        adoc.tableCell(securityScheme.getOpenIdConnectUrl());
+        adoc.tableCell(securityScheme.getDescription());
+        adoc.tableEndRow();
+        adoc.tableEnd();
+      });
+    }    
   }
 
   private void handleModel(String name, Schema<?> schema) {
@@ -138,7 +175,7 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
       adoc.par(schema.getDescription());
     }
 
-    var properties  = schema.getProperties();
+    var properties = schema.getProperties();
     if (properties != null) {
       adoc.section4("Properties");
       adoc.tableHeader("1,1,1,2,2", "|Name|Type|Format|Description|Example");
@@ -183,7 +220,9 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
     }
 
     adoc.section3(path);
-    adoc.par(AsciiDoc.italic("(" + operation.getOperationId() + ")"));
+    if (operation.getOperationId() != null) {
+      adoc.par(AsciiDoc.italic("(" + operation.getOperationId() + ")"));
+    }
 
     // original call
     adoc.codeBlock("shell", method.toUpperCase() + " " + path);
@@ -212,6 +251,26 @@ public class SwaggerAsciiDocGeneratorImpl implements SwaggerAsciiDocGenerator {
 
     // responses
     handleResponses(operation.getResponses());
+
+    // security
+    handleLocalSecurity(operation.getSecurity());
+  }
+
+  private void handleLocalSecurity(List<SecurityRequirement> security) {
+    if (security == null || security.isEmpty()) {
+      return;
+    }
+
+    adoc.section4("Security");
+    adoc.tableHeader("1,2", "|Securityscheme|Description");
+    security.forEach(securityRequirement -> {
+      securityRequirement.keySet().forEach(key -> {
+        adoc.tableCell(key);
+        adoc.tableCell(securityRequirement.get(key).stream().collect(Collectors.joining(",")));
+        adoc.tableEndRow();
+      });
+    });
+    adoc.tableEnd();
   }
 
   private void handleResponses(ApiResponses responses) {
